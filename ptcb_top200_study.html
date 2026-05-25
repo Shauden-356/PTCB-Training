@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PTCB Top 200 Drugs Study Tool</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f4f0;
+    --surface: #ffffff;
+    --surface2: #f0efe9;
+    --border: #e2e0d8;
+    --border2: #cccab8;
+    --text: #1a1917;
+    --text2: #6b6960;
+    --text3: #9b9a94;
+    --blue: #1a56db;
+    --blue-bg: #eff4ff;
+    --blue-border: #a4cafe;
+    --green: #057a55;
+    --green-bg: #f3faf7;
+    --green-border: #84e1bc;
+    --red: #c81e1e;
+    --red-bg: #fdf2f2;
+    --red-border: #f8b4b4;
+    --amber: #92400e;
+    --amber-bg: #fffbeb;
+    --amber-border: #fcd34d;
+    --purple: #5521b5;
+    --purple-bg: #f5f3ff;
+    --purple-border: #c4b5fd;
+    --radius: 10px;
+    --radius-sm: 6px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  /* Layout */
+  .shell { display: flex; min-height: 100vh; }
+  .sidebar { width: 240px; background: var(--surface); border-right: 1px solid var(--border); padding: 1.5rem 1rem; display: flex; flex-direction: column; gap: .25rem; position: fixed; top: 0; left: 0; height: 100vh; z-index: 10; }
+  .main { margin-left: 240px; flex: 1; padding: 2rem; max-width: 960px; }
+  .logo { display: flex; align-items: center; gap: 10px; padding: .5rem .75rem; margin-bottom: 1rem; }
+  .logo-icon { width: 34px; height: 34px; background: var(--blue); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; }
+  .logo-text { font-size: 15px; font-weight: 600; color: var(--text); line-height: 1.2; }
+  .logo-sub { font-size: 11px; color: var(--text2); font-family: 'DM Mono', monospace; }
+  .nav-label { font-size: 10px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: .08em; padding: .25rem .75rem; margin-top: .5rem; }
+  .nav-btn { display: flex; align-items: center; gap: 10px; padding: .6rem .75rem; border-radius: var(--radius-sm); border: none; background: transparent; color: var(--text2); cursor: pointer; font-size: 14px; font-family: inherit; width: 100%; text-align: left; transition: all .15s; }
+  .nav-btn:hover { background: var(--surface2); color: var(--text); }
+  .nav-btn.active { background: var(--blue-bg); color: var(--blue); font-weight: 500; }
+  .nav-btn .icon { font-size: 17px; width: 20px; text-align: center; }
+  .nav-btn .count { margin-left: auto; font-family: 'DM Mono', monospace; font-size: 11px; background: var(--surface2); padding: 1px 6px; border-radius: 99px; color: var(--text3); }
+  .nav-btn.active .count { background: var(--blue-border); color: var(--blue); }
+
+  /* Stats bar */
+  .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 1.75rem; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; }
+  .stat-val { font-size: 26px; font-weight: 600; color: var(--text); font-family: 'DM Mono', monospace; }
+  .stat-lbl { font-size: 12px; color: var(--text2); margin-top: 2px; }
+  .stat-bar { height: 3px; background: var(--border); border-radius: 99px; margin-top: 8px; overflow: hidden; }
+  .stat-bar-fill { height: 100%; background: var(--blue); border-radius: 99px; transition: width .5s ease; }
+
+  /* Panel headers */
+  .panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; flex-wrap: wrap; gap: .75rem; }
+  .panel-title { font-size: 20px; font-weight: 600; color: var(--text); }
+  .panel-sub { font-size: 13px; color: var(--text2); margin-top: 2px; }
+
+  /* Buttons */
+  .btn { padding: 7px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border2); background: var(--surface); color: var(--text); cursor: pointer; font-size: 13px; font-weight: 500; font-family: inherit; transition: all .15s; display: inline-flex; align-items: center; gap: 6px; }
+  .btn:hover { background: var(--surface2); border-color: var(--border2); }
+  .btn.primary { background: var(--blue); color: white; border-color: var(--blue); }
+  .btn.primary:hover { background: #1447c0; }
+  .btn.danger-outline { color: var(--red); border-color: var(--red-border); }
+  .btn.danger-outline:hover { background: var(--red-bg); }
+  .btn.success-outline { color: var(--green); border-color: var(--green-border); }
+  .btn.success-outline:hover { background: var(--green-bg); }
+  .btn.sm { padding: 5px 10px; font-size: 12px; }
+
+  /* Filters */
+  .filters { display: flex; gap: 8px; margin-bottom: 1.25rem; flex-wrap: wrap; }
+  .filters select, .filters input[type=text] { padding: 7px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface); color: var(--text); font-size: 13px; font-family: inherit; outline: none; }
+  .filters select:focus, .filters input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(26,86,219,.1); }
+  .filters input[type=text] { flex: 1; min-width: 180px; }
+
+  /* Quiz */
+  .quiz-wrap { display: flex; flex-direction: column; gap: 1rem; }
+  .quiz-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.75rem; box-shadow: var(--shadow); }
+  .quiz-meta { font-size: 12px; color: var(--text3); font-family: 'DM Mono', monospace; margin-bottom: .75rem; display: flex; gap: 12px; align-items: center; }
+  .quiz-q { font-size: 17px; font-weight: 500; color: var(--text); line-height: 1.5; margin-bottom: 1.25rem; }
+  .quiz-q em { color: var(--text2); font-style: italic; }
+  .quiz-q strong { color: var(--blue); font-weight: 600; }
+  .options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 1rem; }
+  .opt { padding: .875rem 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface2); color: var(--text); cursor: pointer; font-size: 14px; text-align: left; font-family: inherit; transition: all .15s; line-height: 1.4; }
+  .opt:hover:not(.disabled) { background: var(--blue-bg); border-color: var(--blue-border); color: var(--blue); }
+  .opt.correct { background: var(--green-bg); border-color: var(--green-border); color: var(--green); font-weight: 500; }
+  .opt.wrong { background: var(--red-bg); border-color: var(--red-border); color: var(--red); }
+  .opt.disabled { pointer-events: none; opacity: .7; }
+  .opt.disabled.correct { opacity: 1; }
+  .feedback { padding: .875rem 1rem; border-radius: var(--radius-sm); font-size: 13px; line-height: 1.5; display: flex; align-items: flex-start; gap: 8px; }
+  .feedback.correct { background: var(--green-bg); border: 1px solid var(--green-border); color: var(--green); }
+  .feedback.wrong { background: var(--red-bg); border: 1px solid var(--red-border); color: var(--red); }
+  .quiz-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: .875rem; align-items: center; }
+
+  /* Detail panel */
+  .detail-panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); }
+  .detail-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
+  .detail-name { font-size: 20px; font-weight: 600; color: var(--text); }
+  .detail-brand { font-size: 13px; color: var(--text2); margin-top: 2px; }
+  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 1rem 0; }
+  .detail-item { background: var(--surface2); border-radius: var(--radius-sm); padding: .875rem 1rem; }
+  .detail-item .lbl { font-size: 10px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 4px; }
+  .detail-item .val { font-size: 13px; color: var(--text); font-weight: 500; line-height: 1.4; }
+  .detail-notes { background: #fffbeb; border: 1px solid var(--amber-border); border-radius: var(--radius-sm); padding: .875rem 1rem; margin-top: .5rem; }
+  .detail-notes .lbl { font-size: 10px; font-weight: 600; color: var(--amber); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 4px; }
+  .detail-notes .val { font-size: 13px; color: var(--amber); line-height: 1.6; }
+
+  /* Badges */
+  .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 99px; font-size: 11px; font-weight: 500; border: 1px solid; }
+  .badge.blue { background: var(--blue-bg); color: var(--blue); border-color: var(--blue-border); }
+  .badge.green { background: var(--green-bg); color: var(--green); border-color: var(--green-border); }
+  .badge.red { background: var(--red-bg); color: var(--red); border-color: var(--red-border); }
+  .badge.amber { background: var(--amber-bg); color: var(--amber); border-color: var(--amber-border); }
+  .badge.purple { background: var(--purple-bg); color: var(--purple); border-color: var(--purple-border); }
+
+  /* Flashcards */
+  .fc-area { display: flex; flex-direction: column; gap: 1rem; }
+  .fc-wrap { perspective: 1000px; height: 220px; cursor: pointer; }
+  .fc-inner { width: 100%; height: 100%; transform-style: preserve-3d; transition: transform .5s cubic-bezier(.4,0,.2,1); position: relative; }
+  .fc-wrap.flipped .fc-inner { transform: rotateY(180deg); }
+  .fc-front, .fc-back { position: absolute; inset: 0; border-radius: var(--radius); border: 1px solid var(--border); backface-visibility: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; text-align: center; }
+  .fc-front { background: var(--blue); }
+  .fc-back { background: var(--surface); transform: rotateY(180deg); }
+  .fc-hint { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.6); margin-bottom: .75rem; }
+  .fc-drug { font-size: 28px; font-weight: 600; color: white; margin-bottom: .25rem; }
+  .fc-brand-name { font-size: 14px; color: rgba(255,255,255,.7); }
+  .fc-hint-back { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--text3); margin-bottom: .75rem; }
+  .fc-use-text { font-size: 16px; font-weight: 500; color: var(--text); line-height: 1.5; }
+  .fc-class-text { font-size: 12px; color: var(--text2); margin-top: .5rem; }
+  .fc-click-hint { font-size: 11px; color: rgba(255,255,255,.5); margin-top: 1rem; }
+  .fc-controls { display: flex; align-items: center; gap: 8px; }
+  .fc-counter-text { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--text2); margin: 0 auto; }
+  .fc-rate { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  /* Browse */
+  .drug-table { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+  .drug-table-head { display: grid; grid-template-columns: 44px 1fr 1.2fr 80px; gap: 0; background: var(--surface2); border-bottom: 1px solid var(--border); }
+  .th { padding: .625rem 1rem; font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: .07em; }
+  .drug-row { display: grid; grid-template-columns: 44px 1fr 1.2fr 80px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background .1s; align-items: center; }
+  .drug-row:last-child { border-bottom: none; }
+  .drug-row:hover { background: var(--surface2); }
+  .drug-row.selected { background: var(--blue-bg); }
+  .td { padding: .625rem 1rem; font-size: 13px; }
+  .td.num { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text3); text-align: center; }
+  .td .drug-name-main { font-weight: 500; color: var(--text); }
+  .td .drug-brand-sub { font-size: 11px; color: var(--text2); margin-top: 1px; }
+  .drug-detail-drawer { background: var(--surface); border-bottom: 1px solid var(--border); padding: 1.5rem; display: none; }
+  .drug-detail-drawer.open { display: block; }
+  .browse-results-info { font-size: 13px; color: var(--text2); margin-bottom: .75rem; font-family: 'DM Mono', monospace; }
+
+  /* Progress page */
+  .progress-grid { display: grid; grid-template-columns: repeat(10,1fr); gap: 6px; }
+  .prog-cell { aspect-ratio: 1; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 9px; font-family: 'DM Mono',monospace; font-weight: 500; border: 1px solid var(--border); background: var(--surface2); color: var(--text3); cursor: default; position: relative; }
+  .prog-cell.seen { background: var(--blue-bg); border-color: var(--blue-border); color: var(--blue); }
+  .prog-cell.mastered { background: var(--green-bg); border-color: var(--green-border); color: var(--green); }
+  .prog-cell:hover::after { content: attr(data-tip); position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%); background: var(--text); color: white; padding: 4px 8px; border-radius: 4px; font-size: 10px; white-space: nowrap; z-index: 10; pointer-events: none; }
+  .legend { display: flex; gap: 16px; margin-top: 1rem; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text2); }
+  .legend-dot { width: 12px; height: 12px; border-radius: 3px; border: 1px solid; }
+
+  /* Hidden */
+  .hidden { display: none !important; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 99px; }
+
+  /* Responsive */
+  @media (max-width: 700px) {
+    .sidebar { width: 100%; height: auto; position: static; flex-direction: row; flex-wrap: wrap; border-right: none; border-bottom: 1px solid var(--border); padding: .75rem; }
+    .main { margin-left: 0; padding: 1rem; }
+    .stats-bar { grid-template-columns: 1fr 1fr; }
+    .options { grid-template-columns: 1fr; }
+    .detail-grid { grid-template-columns: 1fr; }
+    .drug-table-head, .drug-row { grid-template-columns: 36px 1fr 80px; }
+    .th:nth-child(3), .td:nth-child(3) { display: none; }
+    .logo { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-icon">💊</div>
+      <div>
+        <div class="logo-text">RxStudy</div>
+        <div class="logo-sub">PTCB Top 200</div>
+      </div>
+    </div>
+    <div class="nav-label">Study modes</div>
+    <button class="nav-btn active" onclick="showPage('quiz',this)"><span class="icon">🎯</span> Quiz <span class="count" id="cnt-quiz">0</span></button>
+    <button class="nav-btn" onclick="showPage('flashcards',this)"><span class="icon">🃏</span> Flashcards</button>
+    <div class="nav-label">Reference</div>
+    <button class="nav-btn" onclick="showPage('browse',this)"><span class="icon">📋</span> Browse all <span class="count">200</span></button>
+    <button class="nav-btn" onclick="showPage('progress',this)"><span class="icon">📊</span> Progress</button>
+    <div style="margin-top:auto;padding-top:1rem;border-top:1px solid var(--border);margin-top:auto">
+      <button class="btn sm" onclick="resetAll()" style="width:100%;justify-content:center">↺ Reset progress</button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <!-- Stats -->
+    <div class="stats-bar">
+      <div class="stat-card"><div class="stat-val" id="s-seen">0</div><div class="stat-lbl">Drugs seen</div><div class="stat-bar"><div class="stat-bar-fill" id="s-seen-bar" style="width:0%"></div></div></div>
+      <div class="stat-card"><div class="stat-val" id="s-acc">—</div><div class="stat-lbl">Quiz accuracy</div><div class="stat-bar"><div class="stat-bar-fill" id="s-acc-bar" style="width:0%"></div></div></div>
+      <div class="stat-card"><div class="stat-val" id="s-streak">0</div><div class="stat-lbl">Streak 🔥</div><div class="stat-bar"><div class="stat-bar-fill" id="s-streak-bar" style="width:0%;background:#f59e0b"></div></div></div>
+      <div class="stat-card"><div class="stat-val" id="s-mastered">0</div><div class="stat-lbl">Mastered ✓</div><div class="stat-bar"><div class="stat-bar-fill" id="s-mastered-bar" style="width:0%;background:#057a55"></div></div></div>
+    </div>
+
+    <!-- QUIZ PAGE -->
+    <div id="page-quiz">
+      <div class="panel-header">
+        <div><div class="panel-title">Quiz</div><div class="panel-sub">Test your knowledge of the top 200 drugs</div></div>
+      </div>
+      <div class="filters">
+        <select id="q-mode">
+          <option value="g2u">Generic name → Use</option>
+          <option value="b2g">Brand name → Generic</option>
+          <option value="u2g">Use → Generic name</option>
+          <option value="c2d">Drug class → Drug name</option>
+          <option value="g2c">Generic → Drug class</option>
+        </select>
+        <select id="q-cat"><option value="all">All categories</option></select>
+        <select id="q-ctrl">
+          <option value="all">All drugs</option>
+          <option value="controlled">Controlled only</option>
+          <option value="noncontrolled">Non-controlled only</option>
+        </select>
+      </div>
+      <div class="quiz-wrap">
+        <div class="quiz-card">
+          <div class="quiz-meta" id="q-meta">Loading...</div>
+          <div class="quiz-q" id="q-question"></div>
+          <div class="options" id="q-options"></div>
+          <div class="feedback hidden" id="q-feedback"></div>
+          <div class="quiz-actions">
+            <button class="btn primary hidden" id="btn-next" onclick="nextQuestion()">Next question →</button>
+            <button class="btn hidden" id="btn-info" onclick="toggleQuizDetail()">ℹ Drug info</button>
+          </div>
+        </div>
+        <div id="quiz-detail-wrap" class="hidden"></div>
+      </div>
+    </div>
+
+    <!-- FLASHCARDS PAGE -->
+    <div id="page-flashcards" class="hidden">
+      <div class="panel-header">
+        <div><div class="panel-title">Flashcards</div><div class="panel-sub">Click card to flip — then rate yourself</div></div>
+      </div>
+      <div class="filters">
+        <select id="fc-cat"><option value="all">All categories</option></select>
+        <select id="fc-ctrl"><option value="all">All drugs</option><option value="controlled">Controlled only</option><option value="noncontrolled">Non-controlled only</option></select>
+      </div>
+      <div class="fc-area">
+        <div class="fc-wrap" id="fc-card" onclick="flipFC()">
+          <div class="fc-inner" id="fc-inner">
+            <div class="fc-front">
+              <div class="fc-hint">Generic name</div>
+              <div class="fc-drug" id="fc-drug-name">—</div>
+              <div class="fc-brand-name" id="fc-brand-name">—</div>
+              <div class="fc-click-hint">Click to reveal use →</div>
+            </div>
+            <div class="fc-back">
+              <div class="fc-hint-back">Used for</div>
+              <div class="fc-use-text" id="fc-use-text">—</div>
+              <div class="fc-class-text" id="fc-class-text">—</div>
+            </div>
+          </div>
+        </div>
+        <div id="fc-rate-wrap" class="fc-rate hidden">
+          <button class="btn danger-outline" onclick="rateFC(0)">✕ Didn't know</button>
+          <button class="btn" onclick="rateFC(1)">~ Almost</button>
+          <button class="btn success-outline" onclick="rateFC(2)">✓ Got it!</button>
+          <button class="btn sm" onclick="toggleFCDetail()" style="margin-left:auto">ℹ Info</button>
+        </div>
+        <div id="fc-detail-wrap" class="hidden"></div>
+        <div class="fc-controls">
+          <button class="btn sm" onclick="prevFC()">← Prev</button>
+          <div class="fc-counter-text" id="fc-counter">1 / 200</div>
+          <button class="btn sm" onclick="nextFC()">Next →</button>
+          <button class="btn sm" onclick="shuffleFC()" style="margin-left:auto">⇄ Shuffle</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BROWSE PAGE -->
+    <div id="page-browse" class="hidden">
+      <div class="panel-header">
+        <div><div class="panel-title">Browse all 200 drugs</div><div class="panel-sub">Click any row to see full details</div></div>
+      </div>
+      <div class="filters">
+        <input type="text" id="browse-search" placeholder="Search generic, brand, use, or class…" oninput="renderBrowse()">
+        <select id="browse-cat" onchange="renderBrowse()"><option value="all">All categories</option></select>
+        <select id="browse-ctrl" onchange="renderBrowse()"><option value="all">All drugs</option><option value="controlled">Controlled only</option><option value="noncontrolled">Non-controlled</option></select>
+      </div>
+      <div class="browse-results-info" id="browse-info"></div>
+      <div class="drug-table">
+        <div class="drug-table-head">
+          <div class="th">#</div>
+          <div class="th">Drug</div>
+          <div class="th">Use</div>
+          <div class="th">Sched.</div>
+        </div>
+        <div id="browse-rows"></div>
+      </div>
+    </div>
+
+    <!-- PROGRESS PAGE -->
+    <div id="page-progress" class="hidden">
+      <div class="panel-header">
+        <div><div class="panel-title">Progress tracker</div><div class="panel-sub">Your mastery of all 200 drugs</div></div>
+      </div>
+      <div class="detail-panel" style="margin-bottom:1rem">
+        <div style="display:flex;gap:2rem;flex-wrap:wrap;margin-bottom:1rem">
+          <div><div style="font-size:26px;font-weight:600;font-family:'DM Mono',monospace" id="p-pct">0%</div><div style="font-size:12px;color:var(--text2)">Overall mastery</div></div>
+          <div><div style="font-size:26px;font-weight:600;font-family:'DM Mono',monospace" id="p-total">0</div><div style="font-size:12px;color:var(--text2)">Questions answered</div></div>
+          <div><div style="font-size:26px;font-weight:600;font-family:'DM Mono',monospace" id="p-best">0</div><div style="font-size:12px;color:var(--text2)">Best streak</div></div>
+        </div>
+        <div class="progress-grid" id="prog-grid"></div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--surface2);border-color:var(--border)"></div>Not seen</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--blue-bg);border-color:var(--blue-border)"></div>Seen</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--green-bg);border-color:var(--green-border)"></div>Mastered (3+ correct)</div>
+        </div>
+      </div>
+      <div class="panel-header" style="margin-top:1.5rem"><div class="panel-title" style="font-size:16px">Needs review</div></div>
+      <div id="needs-review-list"></div>
+    </div>
+  </main>
+</div>
+
+<script>
+const DRUGS = [
+  // ACE Inhibitors
+  {id:1,generic:"lisinopril",brand:"Prinivil, Zestril",use:"Hypertension, heart failure, post-MI",class:"ACE Inhibitor",schedule:null,notes:"Monitor for dry cough and hyperkalemia. Do not use in pregnancy. First-line for diabetic nephropathy.",route:"Oral"},
+  {id:2,generic:"enalapril",brand:"Vasotec",use:"Hypertension, heart failure",class:"ACE Inhibitor",schedule:null,notes:"Prodrug converted to enalaprilat. Same cough risk as other ACE inhibitors. Avoid in pregnancy.",route:"Oral/IV"},
+  {id:3,generic:"ramipril",brand:"Altace",use:"Hypertension, heart failure, post-MI, diabetic nephropathy",class:"ACE Inhibitor",schedule:null,notes:"Well-studied post-MI. Dry cough and angioedema possible. Contraindicated in pregnancy.",route:"Oral"},
+  {id:4,generic:"benazepril",brand:"Lotensin",use:"Hypertension",class:"ACE Inhibitor",schedule:null,notes:"Prodrug. Cough side effect. Monitor renal function and potassium. Avoid dual blockade with ARBs.",route:"Oral"},
+  // ARBs
+  {id:5,generic:"losartan",brand:"Cozaar",use:"Hypertension, diabetic nephropathy, stroke prevention",class:"ARB",schedule:null,notes:"No cough (unlike ACE inhibitors). Avoid in pregnancy. Monitor renal function and potassium.",route:"Oral"},
+  {id:6,generic:"valsartan",brand:"Diovan",use:"Hypertension, heart failure, post-MI",class:"ARB",schedule:null,notes:"Can be used in ACE inhibitor-intolerant patients. Avoid in pregnancy. Monitor electrolytes.",route:"Oral"},
+  {id:7,generic:"olmesartan",brand:"Benicar",use:"Hypertension",class:"ARB",schedule:null,notes:"Can cause sprue-like enteropathy with long-term use. Avoid in pregnancy.",route:"Oral"},
+  {id:8,generic:"irbesartan",brand:"Avapro",use:"Hypertension, diabetic nephropathy",class:"ARB",schedule:null,notes:"Renal protection in Type 2 diabetes. Avoid in pregnancy. No significant food interactions.",route:"Oral"},
+  // Beta Blockers
+  {id:9,generic:"metoprolol succinate",brand:"Toprol-XL",use:"Hypertension, heart failure, angina",class:"Beta Blocker (Cardioselective)",schedule:null,notes:"Extended-release. Do not crush. Taper to discontinue. Once-daily dosing.",route:"Oral"},
+  {id:10,generic:"metoprolol tartrate",brand:"Lopressor",use:"Hypertension, angina, post-MI, heart failure",class:"Beta Blocker (Cardioselective)",schedule:null,notes:"Immediate-release. Twice daily. Do not stop abruptly. Take with food.",route:"Oral"},
+  {id:11,generic:"atenolol",brand:"Tenormin",use:"Hypertension, angina, arrhythmias",class:"Beta Blocker (Cardioselective)",schedule:null,notes:"Less CNS penetration. Dose adjust in renal impairment. Do not stop abruptly.",route:"Oral"},
+  {id:12,generic:"carvedilol",brand:"Coreg",use:"Heart failure, hypertension, post-MI",class:"Alpha/Beta Blocker",schedule:null,notes:"Take with food to reduce hypotension. Non-selective — use caution in asthma/COPD.",route:"Oral"},
+  {id:13,generic:"propranolol",brand:"Inderal",use:"Hypertension, angina, migraine prevention, tremor, anxiety",class:"Beta Blocker (Non-selective)",schedule:null,notes:"Crosses blood-brain barrier. Many uses. Masks hypoglycemia signs in diabetics.",route:"Oral"},
+  {id:14,generic:"bisoprolol",brand:"Zebeta",use:"Hypertension, heart failure",class:"Beta Blocker (Cardioselective)",schedule:null,notes:"High cardioselectivity. Once daily. Do not stop abruptly. Dose reduce in renal/hepatic impairment.",route:"Oral"},
+  // Calcium Channel Blockers
+  {id:15,generic:"amlodipine",brand:"Norvasc",use:"Hypertension, angina",class:"Calcium Channel Blocker (DHP)",schedule:null,notes:"Long half-life — once daily. Common side effect: peripheral edema. Can be combined with ACE inhibitors.",route:"Oral"},
+  {id:16,generic:"diltiazem",brand:"Cardizem, Tiazac",use:"Hypertension, angina, arrhythmias (AFib rate control)",class:"Calcium Channel Blocker (Non-DHP)",schedule:null,notes:"Slows heart rate. Do not crush extended-release. Many drug interactions via CYP3A4.",route:"Oral/IV"},
+  {id:17,generic:"verapamil",brand:"Calan, Isoptin",use:"Hypertension, angina, arrhythmias, migraine prevention",class:"Calcium Channel Blocker (Non-DHP)",schedule:null,notes:"Most potent negative chronotrope. Causes constipation. Interacts with digoxin. IV available.",route:"Oral/IV"},
+  {id:18,generic:"nifedipine",brand:"Procardia, Adalat",use:"Hypertension, angina, Raynaud's phenomenon",class:"Calcium Channel Blocker (DHP)",schedule:null,notes:"Do not crush XL form. Reflex tachycardia with immediate-release. Grapefruit interaction.",route:"Oral"},
+  // Diuretics
+  {id:19,generic:"hydrochlorothiazide",brand:"Microzide, HCTZ",use:"Hypertension, edema",class:"Thiazide Diuretic",schedule:null,notes:"Can deplete potassium. Take in morning. Photosensitivity possible. First-line for hypertension.",route:"Oral"},
+  {id:20,generic:"furosemide",brand:"Lasix",use:"Edema, heart failure, hypertension",class:"Loop Diuretic",schedule:null,notes:"Potent diuretic. Monitor electrolytes especially potassium. Ototoxic at high doses. 'Lasix' = lasts 6 hours.",route:"Oral/IV"},
+  {id:21,generic:"spironolactone",brand:"Aldactone",use:"Heart failure, hypertension, hyperaldosteronism, edema",class:"Potassium-Sparing Diuretic",schedule:null,notes:"Monitor potassium — can cause hyperkalemia. Gynecomastia in men. Teratogenic.",route:"Oral"},
+  {id:22,generic:"chlorthalidone",brand:"Thalitone",use:"Hypertension, edema",class:"Thiazide-Like Diuretic",schedule:null,notes:"Longer-acting than HCTZ. Preferred by JNC guidelines. Monitor electrolytes and glucose.",route:"Oral"},
+  {id:23,generic:"torsemide",brand:"Demadex",use:"Edema, heart failure, hypertension",class:"Loop Diuretic",schedule:null,notes:"Better oral bioavailability than furosemide. Monitor electrolytes. Once or twice daily.",route:"Oral/IV"},
+  // Statins
+  {id:24,generic:"atorvastatin",brand:"Lipitor",use:"Hyperlipidemia, cardiovascular disease prevention",class:"Statin",schedule:null,notes:"Take at any time of day. Monitor for myopathy. Avoid grapefruit juice. Most prescribed statin.",route:"Oral"},
+  {id:25,generic:"simvastatin",brand:"Zocor",use:"Hyperlipidemia",class:"Statin",schedule:null,notes:"Take in evening. 80mg dose not recommended due to myopathy risk. Avoid grapefruit.",route:"Oral"},
+  {id:26,generic:"rosuvastatin",brand:"Crestor",use:"Hyperlipidemia, cardiovascular risk reduction",class:"Statin",schedule:null,notes:"Most potent statin. Not significantly metabolized by CYP3A4. Less grapefruit interaction.",route:"Oral"},
+  {id:27,generic:"pravastatin",brand:"Pravachol",use:"Hyperlipidemia, stroke/heart attack prevention",class:"Statin",schedule:null,notes:"Fewer drug interactions. Not CYP3A4 metabolized. Safe with grapefruit. Give at bedtime.",route:"Oral"},
+  {id:28,generic:"lovastatin",brand:"Mevacor",use:"Hyperlipidemia",class:"Statin",schedule:null,notes:"Must be taken with food (evening meal). Avoid grapefruit. Many CYP3A4 drug interactions.",route:"Oral"},
+  // Diabetes
+  {id:29,generic:"metformin",brand:"Glucophage",use:"Type 2 diabetes",class:"Biguanide",schedule:null,notes:"Take with food to reduce GI upset. Hold before contrast dye. Risk of lactic acidosis. First-line T2DM.",route:"Oral"},
+  {id:30,generic:"glipizide",brand:"Glucotrol",use:"Type 2 diabetes",class:"Sulfonylurea",schedule:null,notes:"Take 30 min before meal. Hypoglycemia risk. Photosensitivity. Avoid alcohol.",route:"Oral"},
+  {id:31,generic:"glimepiride",brand:"Amaryl",use:"Type 2 diabetes",class:"Sulfonylurea",schedule:null,notes:"Once daily with first meal. Risk of hypoglycemia. Avoid in sulfa allergy (cross-reactivity possible).",route:"Oral"},
+  {id:32,generic:"glyburide",brand:"DiaBeta, Micronase",use:"Type 2 diabetes",class:"Sulfonylurea",schedule:null,notes:"Highest risk of hypoglycemia among sulfonylureas. Avoid in elderly and renal impairment.",route:"Oral"},
+  {id:33,generic:"sitagliptin",brand:"Januvia",use:"Type 2 diabetes",class:"DPP-4 Inhibitor",schedule:null,notes:"Once daily. Low hypoglycemia risk when used alone. Dose adjust in renal impairment.",route:"Oral"},
+  {id:34,generic:"pioglitazone",brand:"Actos",use:"Type 2 diabetes",class:"Thiazolidinedione",schedule:null,notes:"Edema and weight gain. Risk of heart failure and bladder cancer with prolonged use. Not for CHF.",route:"Oral"},
+  {id:35,generic:"empagliflozin",brand:"Jardiance",use:"Type 2 diabetes, heart failure, chronic kidney disease",class:"SGLT-2 Inhibitor",schedule:null,notes:"Causes glucosuria. Risk of UTI and genital yeast infections. Cardiovascular and renal benefits.",route:"Oral"},
+  {id:36,generic:"liraglutide",brand:"Victoza, Saxenda",use:"Type 2 diabetes (Victoza), obesity (Saxenda)",class:"GLP-1 Receptor Agonist",schedule:null,notes:"Inject subcutaneously. Risk of pancreatitis. Thyroid C-cell tumor risk (black box). Nausea common.",route:"Subcutaneous"},
+  {id:37,generic:"insulin glargine",brand:"Lantus, Basaglar",use:"Type 1 and Type 2 diabetes (basal insulin)",class:"Long-Acting Insulin",schedule:null,notes:"Once daily at same time. Do NOT mix with other insulins. Clear solution (not cloudy).",route:"Subcutaneous"},
+  {id:38,generic:"insulin aspart",brand:"NovoLog",use:"Type 1 and Type 2 diabetes (mealtime insulin)",class:"Rapid-Acting Insulin",schedule:null,notes:"Inject 5–10 min before meals. Onset ~15 min. Can be mixed with NPH insulin.",route:"Subcutaneous"},
+  {id:39,generic:"insulin lispro",brand:"Humalog",use:"Type 1 and Type 2 diabetes (mealtime insulin)",class:"Rapid-Acting Insulin",schedule:null,notes:"Inject 15 min before or immediately after meals. Rapid onset. Keep refrigerated.",route:"Subcutaneous"},
+  {id:40,generic:"insulin NPH",brand:"Humulin N, Novolin N",use:"Type 1 and Type 2 diabetes (intermediate insulin)",class:"Intermediate-Acting Insulin",schedule:null,notes:"Cloudy suspension — roll gently to mix. Twice daily typically. Risk of hypoglycemia during peak.",route:"Subcutaneous"},
+  // Thyroid
+  {id:41,generic:"levothyroxine",brand:"Synthroid, Levoxyl",use:"Hypothyroidism, thyroid hormone replacement",class:"Thyroid Hormone",schedule:null,notes:"Take on empty stomach 30–60 min before breakfast. Many drug interactions. Narrow therapeutic index.",route:"Oral"},
+  {id:42,generic:"methimazole",brand:"Tapazole",use:"Hyperthyroidism (Graves' disease)",class:"Antithyroid Agent",schedule:null,notes:"Can cause agranulocytosis — monitor WBC. Black box: hepatotoxicity. Preferred over PTU (except 1st trimester).",route:"Oral"},
+  // Respiratory
+  {id:43,generic:"albuterol",brand:"ProAir, Ventolin, Proventil",use:"Asthma, COPD, bronchospasm (rescue)",class:"Short-Acting Beta-2 Agonist (SABA)",schedule:null,notes:"Shake before use. Rinse mouth after inhaler. Can cause tremors and tachycardia.",route:"Inhaled/Oral"},
+  {id:44,generic:"fluticasone",brand:"Flonase, Flovent",use:"Allergic rhinitis, asthma (inhaled corticosteroid)",class:"Inhaled Corticosteroid",schedule:null,notes:"Rinse mouth after inhaled use to prevent oral candidiasis. Not for acute asthma attacks.",route:"Inhaled/Nasal"},
+  {id:45,generic:"budesonide",brand:"Pulmicort, Rhinocort",use:"Asthma, allergic rhinitis, Crohn's disease",class:"Inhaled Corticosteroid",schedule:null,notes:"Rinse mouth after inhaled use. Less systemic absorption than older corticosteroids.",route:"Inhaled/Nasal/Oral"},
+  {id:46,generic:"montelukast",brand:"Singulair",use:"Asthma prevention, allergic rhinitis",class:"Leukotriene Receptor Antagonist",schedule:null,notes:"Take in evening. FDA black box: neuropsychiatric events. Not for acute asthma attacks.",route:"Oral"},
+  {id:47,generic:"tiotropium",brand:"Spiriva",use:"COPD maintenance, asthma (add-on)",class:"Long-Acting Anticholinergic (LAMA)",schedule:null,notes:"HandiHaler device — once daily inhalation. Do not swallow capsule. Dry mouth common.",route:"Inhaled"},
+  {id:48,generic:"salmeterol",brand:"Serevent",use:"Asthma maintenance, COPD (must use with ICS for asthma)",class:"Long-Acting Beta-2 Agonist (LABA)",schedule:null,notes:"Black box: increased asthma death risk if used without ICS. Not for rescue use.",route:"Inhaled"},
+  {id:49,generic:"fluticasone/salmeterol",brand:"Advair Diskus",use:"Asthma, COPD maintenance",class:"ICS/LABA Combination",schedule:null,notes:"Rinse mouth after use. Not for rescue. Contains both ICS and LABA.",route:"Inhaled"},
+  {id:50,generic:"ipratropium",brand:"Atrovent",use:"COPD, asthma (rescue in ED), rhinorrhea",class:"Short-Acting Anticholinergic",schedule:null,notes:"Slow onset — not first choice for rescue. Avoid in narrow-angle glaucoma. Dry mouth.",route:"Inhaled/Nasal"},
+  // GI / Acid
+  {id:51,generic:"omeprazole",brand:"Prilosec",use:"GERD, stomach ulcers, heartburn",class:"Proton Pump Inhibitor (PPI)",schedule:null,notes:"Take 30–60 min before eating. Long-term use may reduce Mg and B12. Interacts with clopidogrel.",route:"Oral"},
+  {id:52,generic:"pantoprazole",brand:"Protonix",use:"GERD, erosive esophagitis, Zollinger-Ellison",class:"Proton Pump Inhibitor (PPI)",schedule:null,notes:"IV form available. Take 30 min before meal. Less drug interactions than omeprazole.",route:"Oral/IV"},
+  {id:53,generic:"esomeprazole",brand:"Nexium",use:"GERD, erosive esophagitis, H. pylori (combo)",class:"Proton Pump Inhibitor (PPI)",schedule:null,notes:"S-isomer of omeprazole. Take 30–60 min before meals. OTC and Rx strengths available.",route:"Oral/IV"},
+  {id:54,generic:"lansoprazole",brand:"Prevacid",use:"GERD, ulcers, H. pylori (combination therapy)",class:"Proton Pump Inhibitor (PPI)",schedule:null,notes:"Swallow capsule whole or open and sprinkle on food. Take before eating.",route:"Oral"},
+  {id:55,generic:"famotidine",brand:"Pepcid",use:"GERD, heartburn, stomach ulcers",class:"H2 Receptor Antagonist",schedule:null,notes:"Replaced ranitidine after recall. OTC and Rx strengths. Less drug interactions than cimetidine.",route:"Oral/IV"},
+  {id:56,generic:"ondansetron",brand:"Zofran",use:"Nausea/vomiting from chemo, surgery, pregnancy",class:"5-HT3 Antagonist (Antiemetic)",schedule:null,notes:"QT prolongation risk at high IV doses. ODT dissolves on tongue. Serotonin syndrome risk.",route:"Oral/IV/IM"},
+  {id:57,generic:"promethazine",brand:"Phenergan",use:"Nausea/vomiting, motion sickness, allergies, sedation",class:"Phenothiazine Antiemetic/Antihistamine",schedule:null,notes:"Black box: IV use can cause severe tissue injury — preferred IM. Avoid in children <2 yr.",route:"Oral/IM/Rectal"},
+  {id:58,generic:"metoclopramide",brand:"Reglan",use:"GERD, gastroparesis, nausea",class:"Prokinetic/Antiemetic",schedule:null,notes:"Black box: risk of tardive dyskinesia with long-term use. Limit to 12 weeks. Dopamine antagonist.",route:"Oral/IV"},
+  // Antibiotics
+  {id:59,generic:"amoxicillin",brand:"Amoxil",use:"Bacterial infections (ear, throat, UTI, pneumonia)",class:"Penicillin Antibiotic",schedule:null,notes:"Most common antibiotic. Check for penicillin allergy. Take full course. May cause GI upset.",route:"Oral"},
+  {id:60,generic:"amoxicillin-clavulanate",brand:"Augmentin",use:"Sinusitis, pneumonia, skin infections, UTI",class:"Penicillin + Beta-Lactamase Inhibitor",schedule:null,notes:"Broader spectrum. Take with food. Diarrhea common. Penicillin allergy cross-reactivity.",route:"Oral"},
+  {id:61,generic:"azithromycin",brand:"Zithromax, Z-Pack",use:"Pneumonia, chlamydia, sinusitis, strep (penicillin allergy)",class:"Macrolide Antibiotic",schedule:null,notes:"Classic 5-day Z-Pack. QT prolongation risk. Many drug interactions via CYP450.",route:"Oral/IV"},
+  {id:62,generic:"doxycycline",brand:"Vibramycin, Doryx",use:"Bacterial infections, Lyme disease, malaria prevention, acne",class:"Tetracycline Antibiotic",schedule:null,notes:"Take with full glass of water, remain upright 30 min. Avoid dairy/antacids. Photosensitivity.",route:"Oral"},
+  {id:63,generic:"cephalexin",brand:"Keflex",use:"Skin, bone, respiratory bacterial infections",class:"Cephalosporin (1st generation)",schedule:null,notes:"Related to penicillins — cross-sensitivity possible (~1–2%). Complete full course.",route:"Oral"},
+  {id:64,generic:"cefdinir",brand:"Omnicef",use:"Ear infections, sinusitis, skin infections, pneumonia",class:"Cephalosporin (3rd generation)",schedule:null,notes:"Broad spectrum. Red stools possible if taken with iron. Refrigerate suspension.",route:"Oral"},
+  {id:65,generic:"levofloxacin",brand:"Levaquin",use:"Pneumonia, sinusitis, UTI, skin infections",class:"Fluoroquinolone Antibiotic",schedule:null,notes:"Black box: tendon rupture, neuropathy. QT prolongation. Avoid in children and young athletes.",route:"Oral/IV"},
+  {id:66,generic:"ciprofloxacin",brand:"Cipro",use:"UTI, GI, respiratory, skin infections, anthrax",class:"Fluoroquinolone Antibiotic",schedule:null,notes:"Black box: tendon rupture, neuropathy. Avoid dairy and antacids (chelation). QT prolongation.",route:"Oral/IV"},
+  {id:67,generic:"trimethoprim-sulfamethoxazole",brand:"Bactrim, Septra",use:"UTI, PCP pneumonia, MRSA skin infections, ear infections",class:"Sulfonamide Antibiotic",schedule:null,notes:"Monitor renal function and potassium. Avoid in sulfa allergy. Teratogenic. Drink plenty of fluids.",route:"Oral/IV"},
+  {id:68,generic:"metronidazole",brand:"Flagyl",use:"C. diff, bacterial vaginosis, H. pylori, parasites",class:"Nitroimidazole Antibiotic",schedule:null,notes:"Avoid alcohol (disulfiram-like reaction). Metallic taste. Avoid in first trimester of pregnancy.",route:"Oral/IV/Topical/Vaginal"},
+  {id:69,generic:"nitrofurantoin",brand:"Macrobid, Macrodantin",use:"Urinary tract infections (uncomplicated)",class:"Nitrofuran Antibiotic",schedule:null,notes:"Only for uncomplicated UTIs. Take with food. Avoid in late pregnancy and renal impairment.",route:"Oral"},
+  {id:70,generic:"clindamycin",brand:"Cleocin",use:"Skin, bone infections; dental infections; MRSA (soft tissue)",class:"Lincosamide Antibiotic",schedule:null,notes:"Risk of C. difficile colitis. Common for dental infections. Also topical for acne.",route:"Oral/IV/Topical"},
+  // Antifungals
+  {id:71,generic:"fluconazole",brand:"Diflucan",use:"Candida infections (vaginal, oral, systemic), cryptococcosis",class:"Azole Antifungal",schedule:null,notes:"Single-dose effective for vaginal candidiasis. Many drug interactions (CYP2C9, CYP3A4 inhibitor).",route:"Oral/IV"},
+  {id:72,generic:"clotrimazole",brand:"Lotrimin, Mycelex",use:"Topical fungal infections (athlete's foot, ringworm, yeast)",class:"Azole Antifungal (Topical)",schedule:null,notes:"OTC for topical use. Troches available for oral candidiasis. Apply to clean dry skin.",route:"Topical/Buccal"},
+  // Antivirals
+  {id:73,generic:"acyclovir",brand:"Zovirax",use:"Herpes simplex, herpes zoster (shingles), varicella",class:"Antiviral (Nucleoside Analog)",schedule:null,notes:"Stay well hydrated (nephrotoxic in dehydration). Multiple daily doses. Topical form available.",route:"Oral/IV/Topical"},
+  {id:74,generic:"valacyclovir",brand:"Valtrex",use:"Herpes simplex, shingles, cold sores",class:"Antiviral (Prodrug of Acyclovir)",schedule:null,notes:"Better oral bioavailability than acyclovir. Prodrug. Fewer daily doses than acyclovir.",route:"Oral"},
+  {id:75,generic:"oseltamivir",brand:"Tamiflu",use:"Influenza A and B (treatment and prevention)",class:"Neuraminidase Inhibitor (Antiviral)",schedule:null,notes:"Start within 48 hrs of symptom onset. Refrigerate suspension. Neuropsychiatric events (rare) in children.",route:"Oral"},
+  // Anticoagulants
+  {id:76,generic:"warfarin",brand:"Coumadin, Jantoven",use:"DVT, PE, AFib, mechanical heart valves",class:"Anticoagulant (Vitamin K Antagonist)",schedule:null,notes:"Many drug/food interactions. Monitor INR regularly. Antidote: Vitamin K. Narrow therapeutic index.",route:"Oral"},
+  {id:77,generic:"rivaroxaban",brand:"Xarelto",use:"DVT/PE treatment and prevention, AFib stroke prevention",class:"Direct Oral Anticoagulant (Factor Xa Inhibitor)",schedule:null,notes:"Take with evening meal (15/20mg). No INR monitoring needed. Reversal: andexanet alfa.",route:"Oral"},
+  {id:78,generic:"apixaban",brand:"Eliquis",use:"DVT, PE, AFib stroke prevention",class:"Direct Oral Anticoagulant (Factor Xa Inhibitor)",schedule:null,notes:"Twice daily. No food restrictions. Reversal: andexanet alfa. Less GI bleeding than rivaroxaban.",route:"Oral"},
+  {id:79,generic:"dabigatran",brand:"Pradaxa",use:"DVT, PE, AFib stroke prevention",class:"Direct Oral Anticoagulant (Direct Thrombin Inhibitor)",schedule:null,notes:"Moisture-sensitive — store in original container. Reversal: idarucizumab. Take with food.",route:"Oral"},
+  {id:80,generic:"heparin",brand:"Heparin (generic)",use:"DVT, PE, clot prevention (hospital setting)",class:"Anticoagulant (Unfractionated Heparin)",schedule:null,notes:"IV or SubQ. Monitor aPTT. Antidote: protamine sulfate. HIT (heparin-induced thrombocytopenia) risk.",route:"IV/Subcutaneous"},
+  {id:81,generic:"enoxaparin",brand:"Lovenox",use:"DVT prevention and treatment, ACS",class:"Low Molecular Weight Heparin (LMWH)",schedule:null,notes:"SubQ injection. No routine monitoring needed. Antidote: protamine sulfate (partial). Renal dose adjust.",route:"Subcutaneous"},
+  // Antiplatelet
+  {id:82,generic:"clopidogrel",brand:"Plavix",use:"Prevention of blood clots, stroke, MI",class:"Antiplatelet (P2Y12 inhibitor)",schedule:null,notes:"Prodrug — requires CYP2C19 activation. Avoid omeprazole (reduces efficacy). Bleeding risk.",route:"Oral"},
+  {id:83,generic:"aspirin",brand:"Bayer, Ecotrin",use:"Pain, fever, inflammation; MI and stroke prevention (low-dose)",class:"Antiplatelet/NSAID (Salicylate)",schedule:null,notes:"Low-dose (81mg) for cardiac use. Risk of GI bleeding, Reye's syndrome in children. Irreversible platelet inhibition.",route:"Oral/Rectal"},
+  // CNS / Psych
+  {id:84,generic:"sertraline",brand:"Zoloft",use:"Depression, anxiety, OCD, PTSD, panic disorder",class:"SSRI",schedule:null,notes:"Takes 4–6 weeks for full effect. Do not stop abruptly. Serotonin syndrome risk with serotonergic drugs.",route:"Oral"},
+  {id:85,generic:"fluoxetine",brand:"Prozac",use:"Depression, OCD, panic disorder, bulimia nervosa",class:"SSRI",schedule:null,notes:"Longest half-life SSRI — fewer discontinuation symptoms. Many drug interactions via CYP2D6.",route:"Oral"},
+  {id:86,generic:"escitalopram",brand:"Lexapro",use:"Depression, generalized anxiety disorder",class:"SSRI",schedule:null,notes:"Well-tolerated. Takes weeks for full effect. Avoid abrupt discontinuation.",route:"Oral"},
+  {id:87,generic:"citalopram",brand:"Celexa",use:"Depression",class:"SSRI",schedule:null,notes:"QT prolongation risk — max 40mg (20mg in elderly or liver disease). Monitor ECG.",route:"Oral"},
+  {id:88,generic:"paroxetine",brand:"Paxil",use:"Depression, anxiety, OCD, PTSD, panic disorder",class:"SSRI",schedule:null,notes:"Highest discontinuation syndrome of SSRIs. Anticholinergic effects. Strong CYP2D6 inhibitor.",route:"Oral"},
+  {id:89,generic:"duloxetine",brand:"Cymbalta",use:"Depression, anxiety, neuropathic pain, fibromyalgia",class:"SNRI",schedule:null,notes:"Do not chew capsules. Taper to discontinue. Can raise blood pressure slightly.",route:"Oral"},
+  {id:90,generic:"venlafaxine",brand:"Effexor XR",use:"Depression, anxiety, panic disorder",class:"SNRI",schedule:null,notes:"Can increase blood pressure. Taper to discontinue. Discontinuation syndrome is significant.",route:"Oral"},
+  {id:91,generic:"bupropion",brand:"Wellbutrin, Zyban",use:"Depression, smoking cessation, ADHD",class:"NDRI",schedule:null,notes:"Lowers seizure threshold. No sexual side effects. Contraindicated in eating disorders. Zyban = smoking cessation.",route:"Oral"},
+  {id:92,generic:"mirtazapine",brand:"Remeron",use:"Depression, anxiety, insomnia, appetite stimulation",class:"Tetracyclic Antidepressant (NaSSA)",schedule:null,notes:"Sedating (especially at lower doses). Weight gain and increased appetite. Antihistamine mechanism.",route:"Oral"},
+  {id:93,generic:"trazodone",brand:"Desyrel",use:"Depression (off-label: insomnia)",class:"SARI Antidepressant",schedule:null,notes:"Commonly used at low doses for insomnia. Take with food. Risk of priapism (rare but serious).",route:"Oral"},
+  {id:94,generic:"amitriptyline",brand:"Elavil",use:"Depression, neuropathic pain, migraine prevention, insomnia",class:"Tricyclic Antidepressant (TCA)",schedule:null,notes:"Significant anticholinergic effects. Lethal in overdose. Sedating. Avoid in elderly (Beers List).",route:"Oral"},
+  {id:95,generic:"nortriptyline",brand:"Pamelor",use:"Depression, neuropathic pain",class:"Tricyclic Antidepressant (TCA)",schedule:null,notes:"Fewer anticholinergic effects than amitriptyline. Monitor therapeutic drug levels.",route:"Oral"},
+  {id:96,generic:"alprazolam",brand:"Xanax",use:"Anxiety disorders, panic disorder",class:"Benzodiazepine",schedule:"Schedule IV",notes:"High abuse potential. CNS depressant — avoid alcohol. Do not stop abruptly (seizure risk).",route:"Oral"},
+  {id:97,generic:"clonazepam",brand:"Klonopin",use:"Seizures, panic disorder, anxiety",class:"Benzodiazepine",schedule:"Schedule IV",notes:"Longer-acting benzo. Do not stop abruptly. CNS depressant. Used for seizures and anxiety.",route:"Oral"},
+  {id:98,generic:"lorazepam",brand:"Ativan",use:"Anxiety, seizure emergency, pre-procedure sedation",class:"Benzodiazepine",schedule:"Schedule IV",notes:"IV formulation available. Short-to-intermediate acting. Do not stop abruptly. No active metabolites.",route:"Oral/IV/IM"},
+  {id:99,generic:"diazepam",brand:"Valium",use:"Anxiety, seizures, muscle spasms, alcohol withdrawal",class:"Benzodiazepine",schedule:"Schedule IV",notes:"Long-acting with active metabolites. Available as rectal gel for acute seizures. Many interactions.",route:"Oral/IV/Rectal"},
+  {id:100,generic:"zolpidem",brand:"Ambien",use:"Insomnia (short-term)",class:"Non-Benzodiazepine Sedative (Z-drug)",schedule:"Schedule IV",notes:"Short-term use only. Can cause complex sleep behaviors (sleepwalking, etc). Avoid alcohol. C-IV.",route:"Oral"},
+  // Seizure
+  {id:101,generic:"gabapentin",brand:"Neurontin",use:"Seizures, nerve pain, postherpetic neuralgia",class:"Anticonvulsant / Neuropathic Pain Agent",schedule:"Schedule V (some states)",notes:"Drowsiness and dizziness. Do not stop abruptly. Common off-label for anxiety and fibromyalgia.",route:"Oral"},
+  {id:102,generic:"pregabalin",brand:"Lyrica",use:"Nerve pain, fibromyalgia, seizures, anxiety",class:"Anticonvulsant / Neuropathic Pain Agent",schedule:"Schedule V",notes:"C-V. Related to gabapentin. Weight gain, dizziness, drowsiness. Do not stop abruptly.",route:"Oral"},
+  {id:103,generic:"topiramate",brand:"Topamax",use:"Seizures, migraine prevention, weight loss",class:"Anticonvulsant",schedule:null,notes:"Causes kidney stones — drink plenty of fluids. Cognitive effects ('Dopamax'). Weight loss side effect.",route:"Oral"},
+  {id:104,generic:"valproic acid",brand:"Depakote, Depakene",use:"Seizures, bipolar disorder, migraine prevention",class:"Anticonvulsant / Mood Stabilizer",schedule:null,notes:"Teratogenic (neural tube defects — black box). Monitor liver function. Enzyme inhibitor. Monitor levels.",route:"Oral/IV"},
+  {id:105,generic:"lamotrigine",brand:"Lamictal",use:"Seizures, bipolar disorder",class:"Anticonvulsant",schedule:null,notes:"Titrate slowly to reduce Stevens-Johnson syndrome rash risk. Interacts with valproate.",route:"Oral"},
+  {id:106,generic:"levetiracetam",brand:"Keppra",use:"Seizures (multiple types)",class:"Anticonvulsant",schedule:null,notes:"Minimal drug interactions (no CYP450 involvement). Behavioral/mood side effects ('Keppra rage').",route:"Oral/IV"},
+  {id:107,generic:"phenytoin",brand:"Dilantin",use:"Seizures (tonic-clonic, partial)",class:"Anticonvulsant (Hydantoin)",schedule:null,notes:"Narrow therapeutic index. Zero-order kinetics at high doses. Monitor levels. Gingival hyperplasia.",route:"Oral/IV"},
+  // Pain / Opioids
+  {id:108,generic:"acetaminophen",brand:"Tylenol",use:"Pain, fever",class:"Analgesic / Antipyretic",schedule:null,notes:"Max 4g/day (less with liver disease or alcohol). Antidote for overdose: N-acetylcysteine (NAC).",route:"Oral/IV/Rectal"},
+  {id:109,generic:"ibuprofen",brand:"Advil, Motrin",use:"Pain, fever, inflammation, arthritis",class:"NSAID",schedule:null,notes:"Take with food. GI ulcer risk. Avoid in renal impairment, late pregnancy. Cardiovascular risk long-term.",route:"Oral"},
+  {id:110,generic:"naproxen",brand:"Aleve, Naprosyn",use:"Pain, inflammation, arthritis, dysmenorrhea",class:"NSAID",schedule:null,notes:"Longer-acting than ibuprofen. Take with food. Same GI/cardiovascular risks as other NSAIDs.",route:"Oral"},
+  {id:111,generic:"meloxicam",brand:"Mobic",use:"Arthritis pain and inflammation",class:"NSAID (COX-2 preferential)",schedule:null,notes:"Take with food. GI-sparing but not risk-free. Avoid in late pregnancy. Cardiovascular risk.",route:"Oral"},
+  {id:112,generic:"celecoxib",brand:"Celebrex",use:"Arthritis, acute pain, menstrual pain",class:"NSAID (COX-2 Selective)",schedule:null,notes:"Less GI risk than traditional NSAIDs. Sulfa allergy cross-reactivity possible. Cardiovascular risk.",route:"Oral"},
+  {id:113,generic:"hydrocodone/acetaminophen",brand:"Vicodin, Norco, Lortab",use:"Moderate to severe pain",class:"Opioid Analgesic Combination",schedule:"Schedule II",notes:"C-II — no refills. Max APAP 4g/day. High abuse/dependence potential. Respiratory depression risk.",route:"Oral"},
+  {id:114,generic:"oxycodone",brand:"OxyContin, Roxicodone",use:"Moderate to severe chronic pain",class:"Opioid Analgesic",schedule:"Schedule II",notes:"C-II — high abuse potential. ER form: do not crush/chew (fatal). Respiratory depression risk.",route:"Oral"},
+  {id:115,generic:"oxycodone/acetaminophen",brand:"Percocet",use:"Moderate to severe pain",class:"Opioid Analgesic Combination",schedule:"Schedule II",notes:"C-II. Max APAP 4g/day. Abuse potential. Do not drink alcohol. Constipation common.",route:"Oral"},
+  {id:116,generic:"tramadol",brand:"Ultram",use:"Moderate to moderately severe pain",class:"Opioid Analgesic",schedule:"Schedule IV",notes:"C-IV. Lowers seizure threshold. Serotonin syndrome risk. Less potent than true opioids.",route:"Oral"},
+  {id:117,generic:"morphine",brand:"MS Contin, MSIR",use:"Severe pain (cancer, post-op, chronic)",class:"Opioid Analgesic",schedule:"Schedule II",notes:"C-II. Reference standard opioid. Active metabolite accumulates in renal impairment. Many forms.",route:"Oral/IV/IM/SubQ"},
+  {id:118,generic:"fentanyl",brand:"Duragesic, Actiq",use:"Severe pain, anesthesia adjunct",class:"Opioid Analgesic",schedule:"Schedule II",notes:"C-II. Transdermal patch — change every 72 hr. Highly potent. Fatal patch misuse risk.",route:"Transdermal/IV/Buccal"},
+  {id:119,generic:"codeine",brand:"(various combinations)",use:"Mild to moderate pain, cough suppression",class:"Opioid Analgesic",schedule:"Schedule II/III/V",notes:"Prodrug — CYP2D6 converts to morphine. Ultra-rapid metabolizers at risk. Black box in children.",route:"Oral"},
+  {id:120,generic:"naloxone",brand:"Narcan",use:"Opioid overdose reversal",class:"Opioid Antagonist",schedule:null,notes:"Reverses opioid overdose within minutes. Short duration — may need repeat doses. OTC in many states.",route:"Nasal/IM/IV"},
+  // Muscle Relaxants
+  {id:121,generic:"cyclobenzaprine",brand:"Flexeril, Amrix",use:"Muscle spasms, musculoskeletal pain (short-term)",class:"Skeletal Muscle Relaxant",schedule:null,notes:"Causes significant drowsiness. Structurally similar to TCAs. Short-term use (2–3 weeks max).",route:"Oral"},
+  {id:122,generic:"baclofen",brand:"Lioresal",use:"Muscle spasticity (MS, spinal cord injury)",class:"Skeletal Muscle Relaxant (GABA-B agonist)",schedule:null,notes:"Do not stop abruptly — severe withdrawal possible. CNS depression. Intrathecal pump option for severe cases.",route:"Oral/Intrathecal"},
+  {id:123,generic:"methocarbamol",brand:"Robaxin",use:"Muscle spasms (short-term)",class:"Skeletal Muscle Relaxant",schedule:null,notes:"May discolor urine (green/black). Sedation. IV form available. Less CNS depression than other relaxants.",route:"Oral/IV"},
+  {id:124,generic:"tizanidine",brand:"Zanaflex",use:"Muscle spasticity",class:"Skeletal Muscle Relaxant (Alpha-2 Agonist)",schedule:null,notes:"Short duration of action. Take with or without food but consistently. Avoid alcohol. Liver toxicity possible.",route:"Oral"},
+  // Antipsychotics / Mood Stabilizers
+  {id:125,generic:"quetiapine",brand:"Seroquel",use:"Schizophrenia, bipolar disorder, depression (adjunct)",class:"Atypical Antipsychotic",schedule:null,notes:"Sedating (used off-label for insomnia). Monitor for metabolic syndrome. QT prolongation risk.",route:"Oral"},
+  {id:126,generic:"aripiprazole",brand:"Abilify",use:"Schizophrenia, bipolar disorder, depression (adjunct), autism",class:"Atypical Antipsychotic",schedule:null,notes:"Less metabolic effects than other antipsychotics. Can cause akathisia. Partial dopamine agonist.",route:"Oral/IM"},
+  {id:127,generic:"risperidone",brand:"Risperdal",use:"Schizophrenia, bipolar disorder, autism irritability",class:"Atypical Antipsychotic",schedule:null,notes:"Metabolic effects. High risk of EPS among atypicals. Elevated prolactin levels. Long-acting injection available.",route:"Oral/IM"},
+  {id:128,generic:"olanzapine",brand:"Zyprexa",use:"Schizophrenia, bipolar disorder, treatment-resistant depression",class:"Atypical Antipsychotic",schedule:null,notes:"Significant weight gain and metabolic effects. Sedating. ODT form available. Monitor glucose/lipids.",route:"Oral/IM"},
+  {id:129,generic:"lithium",brand:"Lithobid, Eskalith",use:"Bipolar disorder (mania and maintenance)",class:"Mood Stabilizer",schedule:null,notes:"Narrow therapeutic index. Monitor levels, renal and thyroid function. Stay hydrated. Teratogenic.",route:"Oral"},
+  // ADHD
+  {id:130,generic:"methylphenidate",brand:"Ritalin, Concerta",use:"ADHD, narcolepsy",class:"CNS Stimulant",schedule:"Schedule II",notes:"C-II. Insomnia, appetite suppression, growth effects in children. High abuse potential.",route:"Oral"},
+  {id:131,generic:"amphetamine salts",brand:"Adderall",use:"ADHD, narcolepsy",class:"CNS Stimulant",schedule:"Schedule II",notes:"C-II. High abuse potential. Monitor cardiovascular effects. Dose early to avoid insomnia.",route:"Oral"},
+  {id:132,generic:"lisdexamfetamine",brand:"Vyvanse",use:"ADHD, binge eating disorder",class:"CNS Stimulant (Prodrug)",schedule:"Schedule II",notes:"C-II. Prodrug — must be metabolized to be active (lower abuse potential). Once daily.",route:"Oral"},
+  {id:133,generic:"atomoxetine",brand:"Strattera",use:"ADHD",class:"SNRI (non-stimulant ADHD)",schedule:null,notes:"Non-stimulant. Takes weeks for full effect. Black box: suicidal thinking in children. Liver toxicity rare.",route:"Oral"},
+  // Bone / Joint
+  {id:134,generic:"alendronate",brand:"Fosamax",use:"Osteoporosis, Paget's disease",class:"Bisphosphonate",schedule:null,notes:"Take with full glass of water, stay upright 30 min. Take on empty stomach once weekly. Esophageal risk.",route:"Oral"},
+  {id:135,generic:"ibandronate",brand:"Boniva",use:"Postmenopausal osteoporosis",class:"Bisphosphonate",schedule:null,notes:"Monthly oral or quarterly IV. Stay upright 60 min after oral dose. Monitor renal function.",route:"Oral/IV"},
+  {id:136,generic:"raloxifene",brand:"Evista",use:"Osteoporosis prevention/treatment, breast cancer risk reduction",class:"Selective Estrogen Receptor Modulator (SERM)",schedule:null,notes:"Increased VTE and hot flash risk. Reduces invasive breast cancer risk. Not for premenopausal women.",route:"Oral"},
+  // Hormones / Contraceptives
+  {id:137,generic:"estradiol",brand:"Estrace, Vivelle",use:"Menopausal symptoms, hormone replacement, hypogonadism",class:"Estrogen",schedule:null,notes:"Various routes available. Increased risk of DVT, stroke, endometrial cancer. Monitor closely.",route:"Oral/Patch/Cream/Vaginal"},
+  {id:138,generic:"medroxyprogesterone",brand:"Provera, Depo-Provera",use:"Contraception, menstrual disorders, endometriosis",class:"Progestin",schedule:null,notes:"IM injection for contraception (Depo) — every 3 months. Loss of bone density with prolonged use.",route:"Oral/IM"},
+  {id:139,generic:"ethinyl estradiol/norgestimate",brand:"Ortho Tri-Cyclen",use:"Oral contraception, acne",class:"Combination Oral Contraceptive",schedule:null,notes:"Take at same time daily. VTE risk. No protection against STIs. May affect mood. Many interactions.",route:"Oral"},
+  {id:140,generic:"levonorgestrel",brand:"Plan B, Mirena (IUD)",use:"Emergency contraception, IUD contraception",class:"Progestin (Emergency Contraceptive)",schedule:null,notes:"Plan B: take within 72 hrs (up to 120 hrs). Nausea common. Not an abortifacient.",route:"Oral/Intrauterine"},
+  // Urinary
+  {id:141,generic:"tamsulosin",brand:"Flomax",use:"Benign prostatic hyperplasia, kidney stones",class:"Alpha-1 Blocker",schedule:null,notes:"Take 30 min after same meal daily. Orthostatic hypotension. Floppy iris syndrome with eye surgery.",route:"Oral"},
+  {id:142,generic:"finasteride",brand:"Proscar, Propecia",use:"BPH (5mg), male pattern baldness (1mg)",class:"5-Alpha Reductase Inhibitor",schedule:null,notes:"Women of childbearing age should not handle crushed tablets. Takes months for effect. Reduces PSA.",route:"Oral"},
+  {id:143,generic:"solifenacin",brand:"Vesicare",use:"Overactive bladder (urgency, frequency, incontinence)",class:"Anticholinergic / Muscarinic Antagonist",schedule:null,notes:"Dry mouth, constipation, blurred vision. Avoid in narrow-angle glaucoma, urinary retention.",route:"Oral"},
+  {id:144,generic:"oxybutynin",brand:"Ditropan, Oxytrol",use:"Overactive bladder",class:"Anticholinergic / Muscarinic Antagonist",schedule:null,notes:"Significant anticholinergic burden. Avoid in elderly (Beers List). Patch form has fewer systemic effects.",route:"Oral/Patch"},
+  // Dermatology
+  {id:145,generic:"tretinoin",brand:"Retin-A, Renova",use:"Acne, photoaging (wrinkle reduction)",class:"Topical Retinoid",schedule:null,notes:"Apply at night. Photosensitivity — use sunscreen. Irritation, peeling common initially. Teratogenic.",route:"Topical"},
+  {id:146,generic:"triamcinolone",brand:"Kenalog, Aristocort",use:"Inflammatory skin conditions, arthritis (injection), allergies",class:"Corticosteroid (Medium Potency)",schedule:null,notes:"Do not apply to face without direction. Skin atrophy with prolonged use. IM injection for arthritis.",route:"Topical/Injection"},
+  {id:147,generic:"hydrocortisone",brand:"Cortaid, Hydrocort",use:"Mild inflammatory skin conditions, insect bites, eczema",class:"Corticosteroid (Low Potency)",schedule:null,notes:"Lowest potency topical steroid — safe for face. OTC available. Avoid prolonged use on thin skin.",route:"Topical/Oral/IV"},
+  {id:148,generic:"betamethasone",brand:"Diprolene, Celestone",use:"Inflammatory skin conditions, fetal lung maturation (injection)",class:"Corticosteroid (High Potency)",schedule:null,notes:"High potency — avoid on face and skin folds. Skin atrophy risk. IM for fetal lung maturation in preterm labor.",route:"Topical/Injection"},
+  // Antihistamines
+  {id:149,generic:"cetirizine",brand:"Zyrtec",use:"Allergic rhinitis, chronic urticaria",class:"2nd-Generation Antihistamine",schedule:null,notes:"Less sedating than 1st gen. Once daily. May cause some drowsiness. OTC available.",route:"Oral"},
+  {id:150,generic:"loratadine",brand:"Claritin",use:"Allergic rhinitis, hives",class:"2nd-Generation Antihistamine",schedule:null,notes:"Non-sedating. OTC. Once daily. One of the most commonly used allergy medications.",route:"Oral"},
+  {id:151,generic:"fexofenadine",brand:"Allegra",use:"Allergic rhinitis, chronic urticaria",class:"2nd-Generation Antihistamine",schedule:null,notes:"Truly non-sedating. Avoid taking with fruit juice (reduces absorption). OTC available.",route:"Oral"},
+  {id:152,generic:"diphenhydramine",brand:"Benadryl",use:"Allergies, insomnia, motion sickness, nausea",class:"1st-Generation Antihistamine",schedule:null,notes:"Significant sedation and anticholinergic effects. Avoid in elderly (Beers List). OTC available.",route:"Oral/IV/IM/Topical"},
+  // Cardiology Other
+  {id:153,generic:"digoxin",brand:"Lanoxin",use:"Heart failure, atrial fibrillation (rate control)",class:"Cardiac Glycoside",schedule:null,notes:"Narrow therapeutic index. Monitor levels, K+, renal function. Toxicity: nausea, vision changes.",route:"Oral/IV"},
+  {id:154,generic:"amiodarone",brand:"Cordarone, Pacerone",use:"Ventricular arrhythmias, AFib",class:"Antiarrhythmic (Class III)",schedule:null,notes:"Many serious side effects: pulmonary, thyroid, liver, corneal microdeposits. Many drug interactions.",route:"Oral/IV"},
+  {id:155,generic:"nitroglycerin",brand:"Nitrostat, Nitro-Dur",use:"Angina (acute relief), heart failure",class:"Nitrate (Vasodilator)",schedule:null,notes:"Sublingual for acute angina (up to 3 tabs 5 min apart — call 911 if no relief). Tolerance with continuous use.",route:"Sublingual/Patch/IV/Spray"},
+  {id:156,generic:"isosorbide mononitrate",brand:"Imdur",use:"Angina prevention",class:"Nitrate (Vasodilator)",schedule:null,notes:"Allow a nitrate-free interval (8 hrs) to prevent tolerance. Headache common initially.",route:"Oral"},
+  {id:157,generic:"hydralazine",brand:"Apresoline",use:"Hypertension, heart failure (with nitrate)",class:"Direct Vasodilator",schedule:null,notes:"Drug-induced lupus with long-term use. Reflex tachycardia. Often given with isosorbide in heart failure.",route:"Oral/IV"},
+  {id:158,generic:"clonidine",brand:"Catapres, Kapvay",use:"Hypertension, ADHD, opioid withdrawal",class:"Central Alpha-2 Agonist",schedule:null,notes:"Rebound hypertension if stopped abruptly. Sedation. Available as patch. Also for ADHD in children.",route:"Oral/Patch"},
+  // OUD / Addiction
+  {id:159,generic:"methadone",brand:"Dolophine, Methadose",use:"Opioid use disorder, severe chronic pain",class:"Opioid Agonist",schedule:"Schedule II",notes:"C-II. Long/variable half-life. QT prolongation. Very high overdose risk. Dispensed from certified programs for OUD.",route:"Oral"},
+  {id:160,generic:"buprenorphine",brand:"Subutex, Suboxone (with naloxone)",use:"Opioid use disorder, chronic pain",class:"Partial Opioid Agonist",schedule:"Schedule III",notes:"C-III. Ceiling effect for respiratory depression. Suboxone adds naloxone to deter IV misuse. Sublingual.",route:"Sublingual/Buccal/Patch"},
+  // Vitamins / Supplements Rx
+  {id:161,generic:"cholecalciferol",brand:"Vitamin D3",use:"Vitamin D deficiency, osteoporosis prevention",class:"Vitamin / Supplement",schedule:null,notes:"Take with food (fat-soluble). Toxicity possible with excessive doses. Calcium absorption enhancer.",route:"Oral"},
+  {id:162,generic:"ferrous sulfate",brand:"Slow Fe, Feosol",use:"Iron deficiency anemia",class:"Iron Supplement",schedule:null,notes:"Take on empty stomach for best absorption. GI upset common — take with food if needed. Stools may be dark.",route:"Oral"},
+  {id:163,generic:"folic acid",brand:"Folate",use:"Folate deficiency, neural tube defect prevention in pregnancy",class:"B Vitamin / Supplement",schedule:null,notes:"Recommended 400–800 mcg daily in women of childbearing age. Take daily. No significant side effects.",route:"Oral"},
+  {id:164,generic:"cyanocobalamin",brand:"Vitamin B12",use:"Vitamin B12 deficiency, pernicious anemia",class:"Vitamin / Supplement",schedule:null,notes:"Can be given IM if absorption is impaired (pernicious anemia). Intrinsic factor needed for oral absorption.",route:"Oral/IM/Nasal"},
+  // Neuro Other
+  {id:165,generic:"donepezil",brand:"Aricept",use:"Alzheimer's disease (all stages)",class:"Acetylcholinesterase Inhibitor",schedule:null,notes:"Symptomatic only — does not slow disease. Take at bedtime. Bradycardia risk. Nausea/diarrhea common.",route:"Oral"},
+  {id:166,generic:"memantine",brand:"Namenda",use:"Moderate to severe Alzheimer's disease",class:"NMDA Receptor Antagonist",schedule:null,notes:"Can be combined with donepezil. Dizziness, headache. Monitor renal function.",route:"Oral"},
+  {id:167,generic:"sumatriptan",brand:"Imitrex",use:"Migraine, cluster headache (acute treatment)",class:"Triptan (Serotonin 5-HT1 Agonist)",schedule:null,notes:"Not for prevention. Contraindicated in cardiovascular disease. Can cause chest tightness. Multiple routes.",route:"Oral/Nasal/Subcutaneous"},
+  {id:168,generic:"topiramate",brand:"Topamax",use:"Migraine prevention, seizures",class:"Anticonvulsant",schedule:null,notes:"See entry #103. Weight loss side effect. Cognitive effects. Kidney stones.",route:"Oral"},
+  // Infection Other
+  {id:169,generic:"vancomycin",brand:"Vancocin",use:"MRSA, C. diff (oral form), serious gram-positive infections",class:"Glycopeptide Antibiotic",schedule:null,notes:"Red man syndrome with rapid IV infusion — slow rate. Nephrotoxic and ototoxic. Monitor levels.",route:"Oral/IV"},
+  {id:170,generic:"linezolid",brand:"Zyvox",use:"MRSA, VRE, pneumonia",class:"Oxazolidinone Antibiotic",schedule:null,notes:"Serotonin syndrome risk. MAO inhibitor properties — avoid tyramine foods. Bone marrow suppression.",route:"Oral/IV"},
+  {id:171,generic:"piperacillin-tazobactam",brand:"Zosyn",use:"Hospital-acquired infections (broad-spectrum)",class:"Penicillin + Beta-Lactamase Inhibitor",schedule:null,notes:"IV only. Extended-infusion technique common. Broad coverage including Pseudomonas.",route:"IV"},
+  {id:172,generic:"meropenem",brand:"Merrem",use:"Serious hospital-acquired infections, meningitis",class:"Carbapenem Antibiotic",schedule:null,notes:"Broad-spectrum reserved for resistant infections. IV only. Lowers seizure threshold.",route:"IV"},
+  // Ophthalmology / Other
+  {id:173,generic:"latanoprost",brand:"Xalatan",use:"Glaucoma, ocular hypertension",class:"Prostaglandin Analog (Ophthalmic)",schedule:null,notes:"Refrigerate until opened. Apply at bedtime. May permanently change iris color and grow eyelashes.",route:"Ophthalmic"},
+  {id:174,generic:"timolol",brand:"Timoptic",use:"Glaucoma, ocular hypertension",class:"Beta Blocker (Ophthalmic)",schedule:null,notes:"Systemic absorption can occur — monitor for bradycardia and bronchospasm. Avoid in COPD/asthma.",route:"Ophthalmic"},
+  // Oncology Supportive
+  {id:175,generic:"ondansetron",brand:"Zofran",use:"Chemo/radiation-induced nausea and vomiting",class:"5-HT3 Antagonist (Antiemetic)",schedule:null,notes:"See entry #56. Primary use for chemo nausea. QT prolongation at high doses.",route:"Oral/IV"},
+  {id:176,generic:"dexamethasone",brand:"Decadron",use:"Inflammation, allergic reactions, chemo-induced nausea (adjunct), cerebral edema",class:"Corticosteroid (High Potency)",schedule:null,notes:"Most potent commonly used corticosteroid. Many uses. Immunosuppression. Blood sugar elevation.",route:"Oral/IV/IM/Ophthalmic"},
+  // Misc / Other
+  {id:177,generic:"prednisone",brand:"Deltasone",use:"Inflammation, autoimmune conditions, allergic reactions",class:"Corticosteroid",schedule:null,notes:"Take with food. Taper dose — do not stop abruptly. Long-term: weight gain, osteoporosis, immunosuppression.",route:"Oral"},
+  {id:178,generic:"methylprednisolone",brand:"Medrol, Solu-Medrol",use:"Severe inflammation, allergic reactions, MS exacerbations",class:"Corticosteroid",schedule:null,notes:"Available as Dose Pack (taper). IV form for acute situations. Same general precautions as prednisone.",route:"Oral/IV/IM"},
+  {id:179,generic:"allopurinol",brand:"Zyloprim",use:"Gout prevention, high uric acid, kidney stones (uric acid)",class:"Xanthine Oxidase Inhibitor",schedule:null,notes:"Start after acute gout attack resolves. Rash possible — Stevens-Johnson in HLA-B*5801. Drink plenty of fluids.",route:"Oral"},
+  {id:180,generic:"colchicine",brand:"Colcrys, Mitigare",use:"Acute gout, gout prevention, familial Mediterranean fever",class:"Anti-Gout Agent",schedule:null,notes:"GI side effects dose-limiting. Drug interactions via CYP3A4 and P-gp. Narrow therapeutic window.",route:"Oral"},
+  {id:181,generic:"sildenafil",brand:"Viagra, Revatio",use:"Erectile dysfunction (Viagra), pulmonary arterial hypertension (Revatio)",class:"PDE-5 Inhibitor",schedule:null,notes:"Avoid with nitrates (fatal hypotension). Vision changes possible. Take 30–60 min before sexual activity.",route:"Oral"},
+  {id:182,generic:"tadalafil",brand:"Cialis",use:"Erectile dysfunction, BPH, pulmonary arterial hypertension",class:"PDE-5 Inhibitor",schedule:null,notes:"Longest duration (~36 hrs). Avoid with nitrates. Back/muscle pain common. Daily or PRN dosing.",route:"Oral"},
+  {id:183,generic:"hydroxychloroquine",brand:"Plaquenil",use:"Lupus, rheumatoid arthritis, malaria",class:"Antimalarial / DMARD",schedule:null,notes:"Monitor eyes — retinal toxicity with long-term use. Annual eye exams recommended. Take with food.",route:"Oral"},
+  {id:184,generic:"methotrexate",brand:"Trexall, Rheumatrex",use:"RA, psoriasis, certain cancers, ectopic pregnancy",class:"DMARD / Antimetabolite",schedule:null,notes:"Weekly dosing for RA (not daily — toxicity). Folic acid supplementation required. Hepatotoxic, nephrotoxic.",route:"Oral/IM/IV"},
+  {id:185,generic:"adalimumab",brand:"Humira",use:"RA, Crohn's, psoriasis, ankylosing spondylitis",class:"TNF-Alpha Inhibitor (Biologic DMARD)",schedule:null,notes:"Subq injection every 1–2 weeks. TB screening before starting. Increased infection risk (black box).",route:"Subcutaneous"},
+  {id:186,generic:"pantoprazole sodium",brand:"Protonix IV",use:"GERD, stress ulcer prophylaxis (IV form)",class:"Proton Pump Inhibitor (PPI)",schedule:null,notes:"IV infusion in hospital setting for stress ulcer prevention and IV acid suppression. Same class as oral PPIs.",route:"IV"},
+  {id:187,generic:"levocetirizine",brand:"Xyzal",use:"Allergic rhinitis, chronic urticaria",class:"2nd-Generation Antihistamine",schedule:null,notes:"R-enantiomer of cetirizine. Take in evening. May cause more sedation than loratadine.",route:"Oral"},
+  {id:188,generic:"desloratadine",brand:"Clarinex",use:"Allergic rhinitis, chronic urticaria",class:"2nd-Generation Antihistamine",schedule:null,notes:"Active metabolite of loratadine. Non-sedating. Once daily.",route:"Oral"},
+  {id:189,generic:"meclizine",brand:"Antivert, Bonine",use:"Vertigo, motion sickness, nausea",class:"1st-Generation Antihistamine / Antivertigo",schedule:null,notes:"OTC for motion sickness. Causes drowsiness. Anticholinergic effects. Avoid in narrow-angle glaucoma.",route:"Oral"},
+  {id:190,generic:"olopatadine",brand:"Pataday, Patanol",use:"Allergic conjunctivitis",class:"Antihistamine (Ophthalmic)",schedule:null,notes:"Eye drops — antihistamine and mast cell stabilizer. Onset within minutes. OTC available.",route:"Ophthalmic"},
+  {id:191,generic:"sodium chloride 0.9%",brand:"Normal Saline",use:"IV fluid replacement, medication diluent, wound irrigation",class:"Crystalloid IV Fluid",schedule:null,notes:"Most common IV fluid. Isotonic. Risk of hyperchloremic acidosis with large volumes. Used for diluting drugs.",route:"IV/Irrigation/Nasal"},
+  {id:192,generic:"potassium chloride",brand:"K-Dur, Klor-Con",use:"Hypokalemia (low potassium) treatment and prevention",class:"Electrolyte Supplement",schedule:null,notes:"Take with full glass of water, do not crush. IV form must be diluted — never give IV push. GI irritating.",route:"Oral/IV"},
+  {id:193,generic:"magnesium sulfate",brand:"Epsom Salt (IV/IM formulation)",use:"Pre-eclampsia seizure prevention, hypomagnesemia, pre-term labor tocolysis",class:"Electrolyte / Anticonvulsant",schedule:null,notes:"Monitor Mg levels, deep tendon reflexes, respiratory rate, and UO. Antidote: calcium gluconate.",route:"IV/IM"},
+  {id:194,generic:"ketorolac",brand:"Toradol",use:"Short-term moderate to severe pain (post-op, renal colic)",class:"NSAID (Injectable)",schedule:null,notes:"Max 5 days use (systemic). Potent NSAID — same risks as oral NSAIDs (GI, renal). Avoid in renal impairment.",route:"IM/IV/Oral"},
+  {id:195,generic:"lidocaine",brand:"Xylocaine",use:"Local anesthesia, ventricular arrhythmias",class:"Local Anesthetic / Antiarrhythmic (Class Ib)",schedule:null,notes:"Topical and injectable forms. CNS and cardiac toxicity with overdose. Check for preservatives in epidural/spinal use.",route:"Topical/IV/Injection"},
+  {id:196,generic:"epinephrine",brand:"EpiPen, Adrenalin",use:"Anaphylaxis, cardiac arrest, severe asthma",class:"Catecholamine / Vasopressor",schedule:null,notes:"EpiPen — inject into outer thigh for anaphylaxis. Always follow with ER visit. Very short duration.",route:"IM/IV/Subcutaneous/Inhaled"},
+  {id:197,generic:"diphenhydramine",brand:"Benadryl",use:"Allergic reactions, anaphylaxis (adjunct), insomnia, cough, motion sickness",class:"1st-Generation Antihistamine",schedule:null,notes:"See #152. Significant sedation and anticholinergic effects. Avoid in elderly. OTC available.",route:"Oral/IV/IM/Topical"},
+  {id:198,generic:"methylnaltrexone",brand:"Relistor",use:"Opioid-induced constipation",class:"Peripheral Opioid Antagonist",schedule:null,notes:"Does not reverse analgesia (does not cross BBB). Subq injection. For opioid-induced constipation in palliative care.",route:"Subcutaneous/Oral"},
+  {id:199,generic:"senna",brand:"Senokot",use:"Constipation, bowel preparation",class:"Stimulant Laxative",schedule:null,notes:"Take with water. May cause cramping. OTC. Often used in opioid-induced constipation.",route:"Oral"},
+  {id:200,generic:"polyethylene glycol 3350",brand:"MiraLax",use:"Constipation, bowel cleansing",class:"Osmotic Laxative",schedule:null,notes:"Dissolve in 8 oz of liquid. Works in 1–3 days. OTC available. Generally well-tolerated. No taste.",route:"Oral"},
+];
+
+// ── State ──────────────────────────────────────────────────────
+let state = {
+  totalQ: 0, correct: 0, streak: 0, bestStreak: 0,
+  seen: {}, mastered: {},
+  fcIndex: 0, fcPool: [...DRUGS],
+  quizDrug: null, quizAnswered: false,
+  quizDetailOpen: false, fcDetailOpen: false,
+  currentPage: 'quiz', browseSelected: null
+};
+
+// ── Helpers ────────────────────────────────────────────────────
+const cats = [...new Set(DRUGS.map(d => d.class))].sort();
+function poolFor(catSel, ctrlSel) {
+  return DRUGS.filter(d => {
+    if (catSel && catSel !== 'all' && d.class !== catSel) return false;
+    if (ctrlSel === 'controlled' && !d.schedule) return false;
+    if (ctrlSel === 'noncontrolled' && d.schedule) return false;
+    return true;
+  });
+}
+function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function shuffle(arr) { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function masteredCount() { return Object.values(state.mastered).filter(v => v >= 3).length; }
+function updateStats() {
+  const seen = Object.keys(state.seen).length;
+  const acc = state.totalQ ? Math.round(state.correct / state.totalQ * 100) : 0;
+  const m = masteredCount();
+  document.getElementById('s-seen').textContent = seen;
+  document.getElementById('s-acc').textContent = state.totalQ ? acc + '%' : '—';
+  document.getElementById('s-streak').textContent = state.streak;
+  document.getElementById('s-mastered').textContent = m;
+  document.getElementById('s-seen-bar').style.width = (seen / 200 * 100) + '%';
+  document.getElementById('s-acc-bar').style.width = acc + '%';
+  document.getElementById('s-streak-bar').style.width = Math.min(state.streak / 20 * 100, 100) + '%';
+  document.getElementById('s-mastered-bar').style.width = (m / 200 * 100) + '%';
+  const pendingCnt = Object.keys(state.seen).length - m;
+  document.getElementById('cnt-quiz').textContent = state.totalQ;
+}
+function initSelects() {
+  ['q-cat','fc-cat','browse-cat'].forEach(id => {
+    const s = document.getElementById(id);
+    cats.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; s.appendChild(o); });
+  });
+}
+function showPage(name, el) {
+  ['quiz','flashcards','browse','progress'].forEach(p => document.getElementById('page-'+p).classList.toggle('hidden', p !== name));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  state.currentPage = name;
+  if (name === 'browse') renderBrowse();
+  if (name === 'progress') renderProgress();
+}
+
+// ── Detail panel ───────────────────────────────────────────────
+function detailHTML(d) {
+  const schedBadge = d.schedule ? `<span class="badge amber">🔒 ${d.schedule}</span>` : `<span class="badge green">✓ Non-controlled</span>`;
+  return `<div class="detail-panel">
+    <div class="detail-head">
+      <div>
+        <div class="detail-name">${d.generic}</div>
+        <div class="detail-brand">${d.brand}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+        ${schedBadge}
+        <span class="badge blue">${d.class}</span>
+      </div>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-item"><div class="lbl">Used for</div><div class="val">${d.use}</div></div>
+      <div class="detail-item"><div class="lbl">Route</div><div class="val">${d.route}</div></div>
+    </div>
+    <div class="detail-notes"><div class="lbl">⚠ Key counseling points</div><div class="val">${d.notes}</div></div>
+  </div>`;
+}
+
+// ── Quiz ───────────────────────────────────────────────────────
+function nextQuestion() {
+  state.quizAnswered = false;
+  state.quizDetailOpen = false;
+  document.getElementById('btn-next').classList.add('hidden');
+  document.getElementById('btn-info').classList.add('hidden');
+  document.getElementById('q-feedback').classList.add('hidden');
+  document.getElementById('quiz-detail-wrap').classList.add('hidden');
+  document.getElementById('quiz-detail-wrap').innerHTML = '';
+  const pool = poolFor(document.getElementById('q-cat').value, document.getElementById('q-ctrl').value);
+  if (!pool.length) { document.getElementById('q-question').textContent = 'No drugs match the selected filters.'; return; }
+  state.quizDrug = rand(pool);
+  const d = state.quizDrug;
+  state.seen[d.id] = true;
+  updateStats();
+  const mode = document.getElementById('q-mode').value;
+  let qHtml = '', correctAns = '';
+  if (mode === 'g2u') { qHtml = `What is <strong>${d.generic}</strong> (${d.brand}) primarily used for?`; correctAns = d.use; }
+  else if (mode === 'b2g') { qHtml = `What is the generic name for <strong>${d.brand}</strong>?`; correctAns = d.generic; }
+  else if (mode === 'u2g') { qHtml = `Which drug is used for: <em>${d.use}</em>?`; correctAns = d.generic; }
+  else if (mode === 'c2d') { qHtml = `Which drug belongs to the class: <strong>${d.class}</strong>?`; correctAns = d.generic; }
+  else { qHtml = `What is the drug class of <strong>${d.generic}</strong>?`; correctAns = d.class; }
+  document.getElementById('q-question').innerHTML = qHtml;
+  document.getElementById('q-meta').textContent = `Q${state.totalQ + 1} · ${pool.length} drugs in pool · #${d.id} of 200`;
+  // Wrong answers
+  const wrongPool = DRUGS.filter(x => x.id !== d.id);
+  const used = new Set([d.id]);
+  const wrongs = [];
+  while (wrongs.length < 3 && wrongs.length < wrongPool.length) {
+    const w = rand(wrongPool);
+    if (!used.has(w.id)) { used.add(w.id); wrongs.push(w); }
+  }
+  let wrongAnswers = wrongs.map(w => {
+    if (mode === 'g2u') return w.use;
+    if (mode === 'b2g') return w.generic;
+    if (mode === 'u2g' || mode === 'c2d') return w.generic;
+    return w.class;
+  });
+  const opts = shuffle([correctAns, ...wrongAnswers]);
+  const container = document.getElementById('q-options');
+  container.innerHTML = '';
+  opts.forEach(opt => {
+    const b = document.createElement('button');
+    b.className = 'opt';
+    b.textContent = opt;
+    b.onclick = () => checkAns(b, opt, correctAns);
+    container.appendChild(b);
+  });
+}
+function checkAns(btn, chosen, correct) {
+  if (state.quizAnswered) return;
+  state.quizAnswered = true;
+  state.totalQ++;
+  const ok = chosen === correct;
+  if (ok) { state.correct++; state.streak++; state.bestStreak = Math.max(state.bestStreak, state.streak); state.mastered[state.quizDrug.id] = (state.mastered[state.quizDrug.id] || 0) + 1; }
+  else { state.streak = 0; state.mastered[state.quizDrug.id] = 0; }
+  updateStats();
+  document.querySelectorAll('.opt').forEach(o => {
+    o.classList.add('disabled');
+    if (o.textContent === correct) o.classList.add('correct');
+    else if (o === btn && !ok) o.classList.add('wrong');
+  });
+  const fb = document.getElementById('q-feedback');
+  fb.className = 'feedback ' + (ok ? 'correct' : 'wrong');
+  const d = state.quizDrug;
+  fb.innerHTML = ok
+    ? `✓ <strong>Correct!</strong> ${d.generic} (${d.brand}) — ${d.class}`
+    : `✗ <strong>Incorrect.</strong> The answer is: <strong>${correct}</strong> — ${d.class}`;
+  fb.classList.remove('hidden');
+  document.getElementById('btn-next').classList.remove('hidden');
+  document.getElementById('btn-info').classList.remove('hidden');
+}
+function toggleQuizDetail() {
+  state.quizDetailOpen = !state.quizDetailOpen;
+  const wrap = document.getElementById('quiz-detail-wrap');
+  if (state.quizDetailOpen) { wrap.innerHTML = detailHTML(state.quizDrug); wrap.classList.remove('hidden'); document.getElementById('btn-info').textContent = '✕ Close info'; }
+  else { wrap.classList.add('hidden'); document.getElementById('btn-info').textContent = 'ℹ Drug info'; }
+}
+
+// ── Flashcards ─────────────────────────────────────────────────
+function fcPool() { return poolFor(document.getElementById('fc-cat').value, document.getElementById('fc-ctrl').value); }
+function showFC() {
+  const pool = state.fcPool;
+  if (!pool.length) return;
+  if (state.fcIndex >= pool.length) state.fcIndex = 0;
+  const d = pool[state.fcIndex];
+  state.quizDrug = d;
+  state.seen[d.id] = true;
+  updateStats();
+  document.getElementById('fc-card').classList.remove('flipped');
+  document.getElementById('fc-rate-wrap').classList.add('hidden');
+  document.getElementById('fc-detail-wrap').classList.add('hidden');
+  state.fcDetailOpen = false;
+  document.getElementById('fc-drug-name').textContent = d.generic;
+  document.getElementById('fc-brand-name').textContent = d.brand;
+  document.getElementById('fc-use-text').textContent = d.use;
+  document.getElementById('fc-class-text').textContent = d.class;
+  document.getElementById('fc-counter').textContent = `${state.fcIndex + 1} / ${pool.length}`;
+}
+function flipFC() {
+  document.getElementById('fc-card').classList.toggle('flipped');
+  document.getElementById('fc-rate-wrap').classList.remove('hidden');
+}
+function rateFC(r) {
+  const d = state.fcPool[state.fcIndex];
+  state.totalQ++;
+  if (r === 2) { state.correct++; state.streak++; state.bestStreak = Math.max(state.bestStreak, state.streak); state.mastered[d.id] = (state.mastered[d.id] || 0) + 1; }
+  else if (r === 0) { state.streak = 0; state.mastered[d.id] = 0; }
+  updateStats();
+  nextFC();
+}
+function nextFC() { state.fcIndex = (state.fcIndex + 1) % state.fcPool.length; showFC(); }
+function prevFC() { state.fcIndex = (state.fcIndex - 1 + state.fcPool.length) % state.fcPool.length; showFC(); }
+function shuffleFC() { state.fcPool = shuffle(fcPool()); state.fcIndex = 0; showFC(); }
+function toggleFCDetail() {
+  state.fcDetailOpen = !state.fcDetailOpen;
+  const wrap = document.getElementById('fc-detail-wrap');
+  if (state.fcDetailOpen) { wrap.innerHTML = detailHTML(state.fcPool[state.fcIndex]); wrap.classList.remove('hidden'); }
+  else wrap.classList.add('hidden');
+}
+document.getElementById('fc-cat').addEventListener('change', () => { state.fcPool = shuffle(fcPool()); state.fcIndex = 0; showFC(); });
+document.getElementById('fc-ctrl').addEventListener('change', () => { state.fcPool = shuffle(fcPool()); state.fcIndex = 0; showFC(); });
+
+// ── Browse ─────────────────────────────────────────────────────
+function renderBrowse() {
+  const q = document.getElementById('browse-search').value.toLowerCase();
+  const cat = document.getElementById('browse-cat').value;
+  const ctrl = document.getElementById('browse-ctrl').value;
+  const filtered = DRUGS.filter(d => {
+    if (cat !== 'all' && d.class !== cat) return false;
+    if (ctrl === 'controlled' && !d.schedule) return false;
+    if (ctrl === 'noncontrolled' && d.schedule) return false;
+    if (q && !(d.generic.toLowerCase().includes(q) || d.brand.toLowerCase().includes(q) || d.use.toLowerCase().includes(q) || d.class.toLowerCase().includes(q))) return false;
+    return true;
+  });
+  document.getElementById('browse-info').textContent = `Showing ${filtered.length} of 200 drugs`;
+  const container = document.getElementById('browse-rows');
+  container.innerHTML = '';
+  if (!filtered.length) { container.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--text3);font-size:14px">No drugs match your search.</div>'; return; }
+  filtered.forEach(d => {
+    const row = document.createElement('div');
+    row.className = 'drug-row' + (state.browseSelected === d.id ? ' selected' : '');
+    row.setAttribute('data-id', d.id);
+    const schedBadge = d.schedule ? `<span class="badge amber" style="font-size:10px">${d.schedule}</span>` : `<span class="badge green" style="font-size:10px">—</span>`;
+    row.innerHTML = `<div class="td num">${d.id}</div>
+      <div class="td"><div class="drug-name-main">${d.generic}</div><div class="drug-brand-sub">${d.brand}</div></div>
+      <div class="td" style="color:var(--text2);font-size:12px;line-height:1.4">${d.use}</div>
+      <div class="td">${schedBadge}</div>`;
+    row.onclick = () => {
+      state.browseSelected = state.browseSelected === d.id ? null : d.id;
+      renderBrowse();
+      if (state.browseSelected === d.id) {
+        setTimeout(() => {
+          const drawer = document.getElementById('drawer-' + d.id);
+          if (drawer) drawer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 50);
+      }
+    };
+    container.appendChild(row);
+    if (state.browseSelected === d.id) {
+      const drawer = document.createElement('div');
+      drawer.className = 'drug-detail-drawer open';
+      drawer.id = 'drawer-' + d.id;
+      drawer.innerHTML = detailHTML(d);
+      container.appendChild(drawer);
+    }
+  });
+}
+
+// ── Progress ───────────────────────────────────────────────────
+function renderProgress() {
+  const m = masteredCount();
+  const seen = Object.keys(state.seen).length;
+  document.getElementById('p-pct').textContent = Math.round(m / 200 * 100) + '%';
+  document.getElementById('p-total').textContent = state.totalQ;
+  document.getElementById('p-best').textContent = state.bestStreak;
+  const grid = document.getElementById('prog-grid');
+  grid.innerHTML = '';
+  DRUGS.forEach(d => {
+    const cell = document.createElement('div');
+    cell.className = 'prog-cell';
+    const isM = (state.mastered[d.id] || 0) >= 3;
+    const isSeen = state.seen[d.id];
+    if (isM) cell.classList.add('mastered');
+    else if (isSeen) cell.classList.add('seen');
+    cell.textContent = d.id;
+    cell.setAttribute('data-tip', d.generic);
+    grid.appendChild(cell);
+  });
+  const review = DRUGS.filter(d => state.seen[d.id] && (state.mastered[d.id] || 0) < 3).slice(0, 20);
+  const list = document.getElementById('needs-review-list');
+  if (!review.length) { list.innerHTML = '<div style="color:var(--text2);font-size:14px">No drugs to review — keep studying!</div>'; return; }
+  list.innerHTML = review.map(d => `<div style="display:flex;align-items:center;gap:10px;padding:.625rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:6px">
+    <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text3);width:24px">${d.id}</span>
+    <span style="font-weight:500;flex:1">${d.generic}</span>
+    <span style="font-size:12px;color:var(--text2)">${d.brand}</span>
+    <span class="badge ${d.schedule ? 'amber' : 'green'}" style="font-size:10px">${d.schedule || '—'}</span>
+  </div>`).join('');
+}
+
+function resetAll() {
+  if (!confirm('Reset all progress? This cannot be undone.')) return;
+  state.totalQ = 0; state.correct = 0; state.streak = 0; state.bestStreak = 0;
+  state.seen = {}; state.mastered = {};
+  updateStats();
+  if (state.currentPage === 'quiz') nextQuestion();
+  if (state.currentPage === 'progress') renderProgress();
+}
+
+// ── Init ───────────────────────────────────────────────────────
+initSelects();
+['q-mode','q-cat','q-ctrl'].forEach(id => document.getElementById(id).addEventListener('change', nextQuestion));
+nextQuestion();
+state.fcPool = shuffle([...DRUGS]);
+showFC();
+</script>
+</body>
+</html>
