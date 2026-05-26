@@ -14,18 +14,15 @@
     --text-main: #0f172a;
     --text-muted: #64748b;
     --text-light: #94a3b8;
-    
     --accent: #3b82f6;
     --accent-hover: #2563eb;
     --accent-bg: #eff6ff;
-    
     --success: #10b981;
     --success-bg: #d1fae5;
     --danger: #ef4444;
     --danger-bg: #fee2e2;
     --warning: #f59e0b;
     --warning-bg: #fef3c7;
-    
     --radius-lg: 16px;
     --radius-md: 12px;
     --radius-sm: 8px;
@@ -35,7 +32,6 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Inter', sans-serif; background: var(--bg-gradient); color: var(--text-main); min-height: 100vh; overflow-x: hidden; }
 
-  /* Layout */
   .app-container { display: flex; min-height: 100vh; }
   
   .sidebar {
@@ -52,85 +48,80 @@
     z-index: 10;
   }
   
-  .main-content { margin-left: 260px; flex: 1; padding: 2.5rem; max-width: 1200px; margin-right: auto; }
+  .main-content { margin-left: 260px; flex: 1; padding: 2.5rem; max-width: 1200px; }
 
-  /* Branding */
   .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 2rem; }
   .brand-icon { font-size: 24px; background: var(--accent); padding: 8px; border-radius: var(--radius-md); color: white; box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3); }
   .brand-title { font-size: 18px; font-weight: 700; color: var(--text-main); }
   .brand-subtitle { font-size: 12px; color: var(--text-muted); font-family: 'Fira Code', monospace; }
 
-  /* Navigation */
   .nav-header { font-size: 11px; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 1rem; padding-bottom: 0.5rem; }
   .nav-btn { display: flex; align-items: center; gap: 12px; padding: 0.75rem 1rem; border-radius: var(--radius-md); border: none; background: transparent; color: var(--text-muted); cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s; width: 100%; text-align: left; }
   .nav-btn:hover { background: var(--surface2); color: var(--text-main); }
   .nav-btn.active { background: var(--accent-bg); color: var(--accent); font-weight: 600; }
   .nav-btn .count { margin-left: auto; font-family: 'Fira Code', monospace; font-size: 11px; background: rgba(0,0,0,0.05); padding: 2px 8px; border-radius: 99px; }
-  .nav-btn.active .count { background: var(--accent); color: white; }
 
-  /* Stats Dashboard */
   .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
-  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow-soft); transition: transform 0.2s; }
-  .stat-card:hover { transform: translateY(-2px); }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow-soft); }
   .stat-value { font-size: 32px; font-weight: 700; font-family: 'Fira Code', monospace; color: var(--text-main); }
   .stat-label { font-size: 13px; color: var(--text-muted); margin-top: 4px; font-weight: 500; }
   .progress-track { height: 6px; background: var(--surface2); border-radius: 99px; margin-top: 12px; overflow: hidden; }
-  .progress-fill { height: 100%; background: var(--accent); border-radius: 99px; transition: width 0.8s ease; }
+  .progress-fill { height: 100%; background: var(--accent); transition: width 0.8s ease; }
 
-  /* Headers */
   .page-header { margin-bottom: 2rem; }
-  .page-title { font-size: 28px; font-weight: 700; color: var(--text-main); letter-spacing: -0.02em; }
-  .page-desc { font-size: 15px; color: var(--text-muted); margin-top: 4px; }
+  .page-title { font-size: 28px; font-weight: 700; color: var(--text-main); }
+  .page-desc { font-size: 15px; color: var(--text-muted); }
 
-  /* Controls & Filters */
-  .control-panel { background: var(--surface); padding: 1rem; border-radius: var(--radius-lg); border: 1px solid var(--border); margin-bottom: 1.5rem; display: flex; gap: 12px; flex-wrap: wrap; box-shadow: var(--shadow-soft); }
-  .input-elem { padding: 0.6rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border); background: var(--surface2); color: var(--text-main); font-size: 14px; font-family: inherit; outline: none; transition: border 0.2s; flex: 1; min-width: 200px; cursor: pointer; }
-  .input-elem:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-bg); background: white; }
+  .control-panel { background: var(--surface); padding: 1rem; border-radius: var(--radius-lg); border: 1px solid var(--border); margin-bottom: 1.5rem; display: flex; gap: 12px; flex-wrap: wrap; }
+  .input-elem { padding: 0.6rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border); background: var(--surface2); font-size: 14px; flex: 1; min-width: 180px; }
   
-  /* Buttons */
-  .btn { padding: 0.6rem 1.2rem; border-radius: var(--radius-md); border: none; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
-  .btn-primary { background: var(--accent); color: white; box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2); }
-  .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
+  .btn { padding: 0.6rem 1.2rem; border-radius: var(--radius-md); border: none; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+  .btn-primary { background: var(--accent); color: white; }
   .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-main); }
-  .btn-outline:hover { background: var(--surface2); }
   
-  /* Quiz System */
+  /* Quiz Styling Fixes */
   .quiz-container { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 2.5rem; box-shadow: var(--shadow-soft); }
-  .question-meta { font-family: 'Fira Code', monospace; font-size: 12px; color: var(--text-light); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; }
-  .question-text { font-size: 22px; font-weight: 600; color: var(--text-main); line-height: 1.4; margin-bottom: 2rem; }
-  .question-text strong { color: var(--accent); }
+  .question-text { font-size: 22px; font-weight: 600; margin-bottom: 2rem; min-height: 60px; }
   
-  .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .option-btn { padding: 1.25rem 1.5rem; border-radius: var(--radius-md); border: 2px solid var(--border); background: var(--surface); color: var(--text-main); font-size: 15px; font-weight: 500; cursor: pointer; text-align: left; transition: all 0.2s; line-height: 1.4; }
+  .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; width: 100%; }
+  .option-btn { 
+    padding: 1.25rem; 
+    border-radius: var(--radius-md); 
+    border: 2px solid var(--border); 
+    background: var(--surface); 
+    color: var(--text-main); 
+    font-size: 15px; 
+    cursor: pointer; 
+    text-align: left; 
+    transition: all 0.2s;
+    min-height: 80px; /* Ensures text doesn't overlap/squish */
+    display: flex;
+    align-items: center;
+    word-break: break-word;
+  }
   .option-btn:hover:not(:disabled) { border-color: var(--accent); background: var(--accent-bg); }
-  .option-btn.correct { background: var(--success-bg); border-color: var(--success); color: #065f46; font-weight: 600; }
+  .option-btn.correct { background: var(--success-bg); border-color: var(--success); color: #065f46; }
   .option-btn.wrong { background: var(--danger-bg); border-color: var(--danger); color: #991b1b; }
-  .option-btn:disabled { cursor: default; }
-  
-  /* Lexicon Tab */
+
+  /* Lexicon Styling */
   .lexicon-layout { display: flex; gap: 1.5rem; height: 600px; }
-  .lexicon-list { width: 35%; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow-y: auto; box-shadow: var(--shadow-soft); }
-  .lexicon-item { padding: 1rem; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.2s; }
-  .lexicon-item:hover, .lexicon-item.active { background: var(--accent-bg); border-left: 4px solid var(--accent); }
-  .lexicon-generic { font-weight: 600; color: var(--text-main); }
-  .lexicon-brand { font-size: 12px; color: var(--text-muted); }
+  .lexicon-list { width: 35%; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow-y: auto; }
+  .lexicon-item { padding: 1rem; border-bottom: 1px solid var(--border); cursor: pointer; }
+  .lexicon-item.active { background: var(--accent-bg); border-left: 4px solid var(--accent); }
+  .lexicon-detail { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 2.5rem; overflow-y: auto; }
   
-  .lexicon-detail { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 2.5rem; box-shadow: var(--shadow-soft); overflow-y: auto; }
-  .detail-tag { display: inline-block; padding: 6px 12px; border-radius: 99px; font-size: 12px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-right: 8px; margin-bottom: 1rem; }
+  .detail-tag { display: inline-block; padding: 6px 12px; border-radius: 99px; font-size: 12px; font-weight: 600; margin-right: 8px; margin-bottom: 1rem; }
   .tag-class { background: var(--accent-bg); color: var(--accent); }
-  .tag-sched { background: var(--warning-bg); color: #b45309; }
-  .tag-route { background: #f3e8ff; color: #7e22ce; }
-  
-  .info-section { margin-top: 1.5rem; }
-  .info-label { font-size: 12px; font-weight: 700; color: var(--text-light); text-transform: uppercase; margin-bottom: 6px; }
-  .info-value { font-size: 15px; color: var(--text-main); line-height: 1.6; }
   .info-box { background: var(--warning-bg); border-left: 4px solid var(--warning); padding: 1.25rem; border-radius: 0 var(--radius-md) var(--radius-md) 0; margin-top: 2rem; }
 
-  /* Utility */
   .hidden { display: none !important; }
-  ::-webkit-scrollbar { width: 8px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; }
+  
+  @media (max-width: 900px) {
+    .sidebar { width: 70px; padding: 1rem 0.5rem; }
+    .brand-title, .brand-subtitle, .nav-header, .nav-btn span:not(.count) { display: none; }
+    .main-content { margin-left: 70px; padding: 1.5rem; }
+    .options-grid { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
@@ -144,16 +135,13 @@
         <div class="brand-subtitle">PTCB Top 200 Core</div>
       </div>
     </div>
-    
     <div class="nav-header">Practice</div>
     <button class="nav-btn active" onclick="switchTab('quiz', this)">🎯 Quick Quiz <span class="count" id="nav-quiz-cnt">0</span></button>
-    
     <div class="nav-header">Knowledge Base</div>
     <button class="nav-btn" onclick="switchTab('lexicon', this)">📖 Drug Lexicon</button>
   </aside>
 
   <main class="main-content">
-    
     <div class="stats-grid">
       <div class="stat-card">
         <div class="stat-value" id="stat-seen">0</div>
@@ -172,10 +160,10 @@
       </div>
     </div>
 
-    <div id="tab-quiz">
+    <div id="tab-quiz" class="tab-content">
       <div class="page-header">
         <h1 class="page-title">Quick Quiz</h1>
-        <p class="page-desc">Test your knowledge dynamically across multiple formats.</p>
+        <p class="page-desc">Test your knowledge across multiple formats.</p>
       </div>
       
       <div class="control-panel">
@@ -188,263 +176,43 @@
         <select class="input-elem" id="filter-class" onchange="loadQuestion()">
           <option value="all">All Drug Classes</option>
         </select>
-        <select class="input-elem" id="filter-sched" onchange="loadQuestion()">
-          <option value="all">All Schedules</option>
-          <option value="controlled">Controlled Substances</option>
-          <option value="noncontrolled">Non-Controlled</option>
-        </select>
       </div>
 
       <div class="quiz-container">
-        <div class="question-meta" id="quiz-meta">Loading...</div>
         <div class="question-text" id="quiz-question"></div>
         <div class="options-grid" id="quiz-options"></div>
-        
         <div style="margin-top: 2rem; display: flex; gap: 1rem;">
           <button class="btn btn-primary hidden" id="btn-next" onclick="loadQuestion()">Next Question →</button>
-          <button class="btn btn-outline hidden" id="btn-reveal" onclick="openLexicon(currentDrug.id)">View Full Info</button>
+          <button class="btn btn-outline hidden" id="btn-reveal" onclick="openLexicon(currentDrug.id)">View Info</button>
         </div>
       </div>
     </div>
 
-    <div id="tab-lexicon" class="hidden">
+    <div id="tab-lexicon" class="tab-content hidden">
       <div class="page-header">
         <h1 class="page-title">Drug Lexicon</h1>
-        <p class="page-desc">Search and study detailed monographs for the Top 200 drugs.</p>
+        <p class="page-desc">Search detailed monographs.</p>
       </div>
-      
       <div class="control-panel">
-        <input type="text" class="input-elem" id="lexicon-search" placeholder="Search by generic, brand, or use..." onkeyup="renderLexiconList()">
+        <input type="text" class="input-elem" id="lexicon-search" placeholder="Search..." onkeyup="renderLexiconList()">
       </div>
-
       <div class="lexicon-layout">
-        <div class="lexicon-list" id="lexicon-list">
-          </div>
+        <div class="lexicon-list" id="lexicon-list"></div>
         <div class="lexicon-detail" id="lexicon-detail">
-          <div style="text-align: center; color: var(--text-muted); margin-top: 40%; font-size: 15px;">Select a drug from the list to view details.</div>
+          <div style="text-align: center; color: var(--text-muted); margin-top: 40%;">Select a drug to view details.</div>
         </div>
       </div>
     </div>
-
   </main>
 </div>
 
 <script>
-// FULL 200 DRUG DATABASE INCLUDED
-const DRUGS = [
-  {id:1,generic:"lisinopril",brand:"Prinivil, Zestril",use:"Hypertension, heart failure, post-MI",class:"ACE Inhibitor",schedule:null,notes:"Monitor for dry cough and hyperkalemia. Do not use in pregnancy.",route:"Oral"},
-  {id:2,generic:"enalapril",brand:"Vasotec",use:"Hypertension, heart failure",class:"ACE Inhibitor",schedule:null,notes:"Prodrug converted to enalaprilat. Same cough risk as other ACE inhibitors. Avoid in pregnancy.",route:"Oral/IV"},
-  {id:3,generic:"ramipril",brand:"Altace",use:"Hypertension, heart failure, post-MI, diabetic nephropathy",class:"ACE Inhibitor",schedule:null,notes:"Well-studied post-MI. Dry cough and angioedema possible.",route:"Oral"},
-  {id:4,generic:"benazepril",brand:"Lotensin",use:"Hypertension",class:"ACE Inhibitor",schedule:null,notes:"Prodrug. Cough side effect. Monitor renal function and potassium.",route:"Oral"},
-  {id:5,generic:"losartan",brand:"Cozaar",use:"Hypertension, diabetic nephropathy",class:"ARB",schedule:null,notes:"No cough (unlike ACE inhibitors). Avoid in pregnancy.",route:"Oral"},
-  {id:6,generic:"valsartan",brand:"Diovan",use:"Hypertension, heart failure, post-MI",class:"ARB",schedule:null,notes:"Can be used in ACE inhibitor-intolerant patients. Avoid in pregnancy.",route:"Oral"},
-  {id:7,generic:"olmesartan",brand:"Benicar",use:"Hypertension",class:"ARB",schedule:null,notes:"Can cause sprue-like enteropathy with long-term use.",route:"Oral"},
-  {id:8,generic:"irbesartan",brand:"Avapro",use:"Hypertension, diabetic nephropathy",class:"ARB",schedule:null,notes:"Renal protection in Type 2 diabetes. Avoid in pregnancy.",route:"Oral"},
-  {id:9,generic:"metoprolol succinate",brand:"Toprol-XL",use:"Hypertension, heart failure, angina",class:"Beta Blocker",schedule:null,notes:"Extended-release. Do not crush. Taper to discontinue. Once-daily.",route:"Oral"},
-  {id:10,generic:"metoprolol tartrate",brand:"Lopressor",use:"Hypertension, angina, post-MI",class:"Beta Blocker",schedule:null,notes:"Immediate-release. Twice daily. Do not stop abruptly.",route:"Oral"},
-  {id:11,generic:"atenolol",brand:"Tenormin",use:"Hypertension, angina, arrhythmias",class:"Beta Blocker",schedule:null,notes:"Less CNS penetration. Dose adjust in renal impairment.",route:"Oral"},
-  {id:12,generic:"carvedilol",brand:"Coreg",use:"Heart failure, hypertension, post-MI",class:"Alpha/Beta Blocker",schedule:null,notes:"Take with food to reduce hypotension. Non-selective — use caution in asthma/COPD.",route:"Oral"},
-  {id:13,generic:"propranolol",brand:"Inderal",use:"Hypertension, angina, migraine prevention, tremor",class:"Beta Blocker",schedule:null,notes:"Crosses blood-brain barrier. Masks hypoglycemia signs in diabetics.",route:"Oral"},
-  {id:14,generic:"bisoprolol",brand:"Zebeta",use:"Hypertension, heart failure",class:"Beta Blocker",schedule:null,notes:"High cardioselectivity. Once daily. Do not stop abruptly.",route:"Oral"},
-  {id:15,generic:"amlodipine",brand:"Norvasc",use:"Hypertension, angina",class:"Calcium Channel Blocker",schedule:null,notes:"Long half-life. Common side effect: peripheral edema.",route:"Oral"},
-  {id:16,generic:"diltiazem",brand:"Cardizem",use:"Hypertension, angina, arrhythmias",class:"Calcium Channel Blocker",schedule:null,notes:"Slows heart rate. Do not crush extended-release. CYP3A4 interactions.",route:"Oral/IV"},
-  {id:17,generic:"verapamil",brand:"Calan",use:"Hypertension, angina, arrhythmias",class:"Calcium Channel Blocker",schedule:null,notes:"Most potent negative chronotrope. Causes constipation. Interacts with digoxin.",route:"Oral/IV"},
-  {id:18,generic:"nifedipine",brand:"Procardia",use:"Hypertension, angina, Raynaud's phenomenon",class:"Calcium Channel Blocker",schedule:null,notes:"Do not crush XL form. Reflex tachycardia with immediate-release.",route:"Oral"},
-  {id:19,generic:"hydrochlorothiazide",brand:"Microzide",use:"Hypertension, edema",class:"Thiazide Diuretic",schedule:null,notes:"Can deplete potassium. Take in morning. Photosensitivity possible.",route:"Oral"},
-  {id:20,generic:"furosemide",brand:"Lasix",use:"Edema, heart failure, hypertension",class:"Loop Diuretic",schedule:null,notes:"Potent diuretic. Monitor potassium. Ototoxic at high doses.",route:"Oral/IV"},
-  {id:21,generic:"spironolactone",brand:"Aldactone",use:"Heart failure, hypertension, edema",class:"Potassium-Sparing Diuretic",schedule:null,notes:"Monitor potassium — can cause hyperkalemia. Gynecomastia in men.",route:"Oral"},
-  {id:22,generic:"chlorthalidone",brand:"Thalitone",use:"Hypertension, edema",class:"Thiazide-Like Diuretic",schedule:null,notes:"Longer-acting than HCTZ. Preferred by JNC guidelines.",route:"Oral"},
-  {id:23,generic:"torsemide",brand:"Demadex",use:"Edema, heart failure",class:"Loop Diuretic",schedule:null,notes:"Better oral bioavailability than furosemide. Monitor electrolytes.",route:"Oral/IV"},
-  {id:24,generic:"atorvastatin",brand:"Lipitor",use:"Hyperlipidemia",class:"Statin",schedule:null,notes:"Take at any time of day. Monitor for myopathy. Avoid grapefruit juice.",route:"Oral"},
-  {id:25,generic:"simvastatin",brand:"Zocor",use:"Hyperlipidemia",class:"Statin",schedule:null,notes:"Take in evening. 80mg dose not recommended due to myopathy risk.",route:"Oral"},
-  {id:26,generic:"rosuvastatin",brand:"Crestor",use:"Hyperlipidemia",class:"Statin",schedule:null,notes:"Most potent statin. Not significantly metabolized by CYP3A4.",route:"Oral"},
-  {id:27,generic:"pravastatin",brand:"Pravachol",use:"Hyperlipidemia",class:"Statin",schedule:null,notes:"Fewer drug interactions. Safe with grapefruit. Give at bedtime.",route:"Oral"},
-  {id:28,generic:"lovastatin",brand:"Mevacor",use:"Hyperlipidemia",class:"Statin",schedule:null,notes:"Must be taken with food (evening meal). Avoid grapefruit.",route:"Oral"},
-  {id:29,generic:"metformin",brand:"Glucophage",use:"Type 2 diabetes",class:"Biguanide",schedule:null,notes:"Take with food. Hold before contrast dye. Risk of lactic acidosis. First-line T2DM.",route:"Oral"},
-  {id:30,generic:"glipizide",brand:"Glucotrol",use:"Type 2 diabetes",class:"Sulfonylurea",schedule:null,notes:"Take 30 min before meal. Hypoglycemia risk. Avoid alcohol.",route:"Oral"},
-  {id:31,generic:"glimepiride",brand:"Amaryl",use:"Type 2 diabetes",class:"Sulfonylurea",schedule:null,notes:"Once daily with first meal. Risk of hypoglycemia.",route:"Oral"},
-  {id:32,generic:"glyburide",brand:"DiaBeta",use:"Type 2 diabetes",class:"Sulfonylurea",schedule:null,notes:"Highest risk of hypoglycemia among sulfonylureas. Avoid in elderly.",route:"Oral"},
-  {id:33,generic:"sitagliptin",brand:"Januvia",use:"Type 2 diabetes",class:"DPP-4 Inhibitor",schedule:null,notes:"Once daily. Low hypoglycemia risk when used alone.",route:"Oral"},
-  {id:34,generic:"pioglitazone",brand:"Actos",use:"Type 2 diabetes",class:"Thiazolidinedione",schedule:null,notes:"Edema and weight gain. Risk of heart failure. Not for CHF patients.",route:"Oral"},
-  {id:35,generic:"empagliflozin",brand:"Jardiance",use:"Type 2 diabetes, heart failure",class:"SGLT-2 Inhibitor",schedule:null,notes:"Causes glucosuria. Risk of UTI and genital yeast infections.",route:"Oral"},
-  {id:36,generic:"liraglutide",brand:"Victoza",use:"Type 2 diabetes, obesity",class:"GLP-1 Receptor Agonist",schedule:null,notes:"Inject subcutaneously. Risk of pancreatitis. Nausea common.",route:"Subcutaneous"},
-  {id:37,generic:"insulin glargine",brand:"Lantus",use:"Type 1 and Type 2 diabetes",class:"Long-Acting Insulin",schedule:null,notes:"Once daily at same time. Do NOT mix with other insulins. Clear solution.",route:"Subcutaneous"},
-  {id:38,generic:"insulin aspart",brand:"NovoLog",use:"Type 1 and Type 2 diabetes",class:"Rapid-Acting Insulin",schedule:null,notes:"Inject 5–10 min before meals. Onset ~15 min.",route:"Subcutaneous"},
-  {id:39,generic:"insulin lispro",brand:"Humalog",use:"Type 1 and Type 2 diabetes",class:"Rapid-Acting Insulin",schedule:null,notes:"Inject 15 min before or immediately after meals.",route:"Subcutaneous"},
-  {id:40,generic:"insulin NPH",brand:"Humulin N",use:"Type 1 and Type 2 diabetes",class:"Intermediate-Acting Insulin",schedule:null,notes:"Cloudy suspension — roll gently to mix. Twice daily typically.",route:"Subcutaneous"},
-  {id:41,generic:"levothyroxine",brand:"Synthroid",use:"Hypothyroidism",class:"Thyroid Hormone",schedule:null,notes:"Take on empty stomach 30–60 min before breakfast. Narrow therapeutic index.",route:"Oral"},
-  {id:42,generic:"methimazole",brand:"Tapazole",use:"Hyperthyroidism",class:"Antithyroid Agent",schedule:null,notes:"Can cause agranulocytosis. Black box: hepatotoxicity.",route:"Oral"},
-  {id:43,generic:"albuterol",brand:"ProAir, Ventolin",use:"Asthma, COPD (rescue)",class:"Beta-2 Agonist",schedule:null,notes:"Shake before use. Rinse mouth after inhaler. Can cause tremors.",route:"Inhaled"},
-  {id:44,generic:"fluticasone",brand:"Flonase, Flovent",use:"Allergic rhinitis, asthma",class:"Corticosteroid",schedule:null,notes:"Rinse mouth after inhaled use to prevent oral candidiasis.",route:"Inhaled/Nasal"},
-  {id:45,generic:"budesonide",brand:"Pulmicort",use:"Asthma, allergic rhinitis",class:"Corticosteroid",schedule:null,notes:"Rinse mouth after inhaled use. Less systemic absorption.",route:"Inhaled/Nasal"},
-  {id:46,generic:"montelukast",brand:"Singulair",use:"Asthma prevention, allergic rhinitis",class:"Leukotriene Receptor Antagonist",schedule:null,notes:"Take in evening. FDA black box: neuropsychiatric events.",route:"Oral"},
-  {id:47,generic:"tiotropium",brand:"Spiriva",use:"COPD maintenance",class:"Anticholinergic",schedule:null,notes:"HandiHaler device — once daily. Do not swallow capsule.",route:"Inhaled"},
-  {id:48,generic:"salmeterol",brand:"Serevent",use:"Asthma maintenance, COPD",class:"Beta-2 Agonist",schedule:null,notes:"Black box: increased asthma death risk if used without ICS.",route:"Inhaled"},
-  {id:49,generic:"fluticasone/salmeterol",brand:"Advair Diskus",use:"Asthma, COPD maintenance",class:"ICS/LABA Combination",schedule:null,notes:"Rinse mouth after use. Not for rescue.",route:"Inhaled"},
-  {id:50,generic:"ipratropium",brand:"Atrovent",use:"COPD, asthma",class:"Anticholinergic",schedule:null,notes:"Avoid in narrow-angle glaucoma. Dry mouth.",route:"Inhaled"},
-  {id:51,generic:"omeprazole",brand:"Prilosec",use:"GERD, stomach ulcers",class:"Proton Pump Inhibitor",schedule:null,notes:"Take 30–60 min before eating. Long-term use may reduce Mg and B12.",route:"Oral"},
-  {id:52,generic:"pantoprazole",brand:"Protonix",use:"GERD, erosive esophagitis",class:"Proton Pump Inhibitor",schedule:null,notes:"Take 30 min before meal. Less drug interactions than omeprazole.",route:"Oral/IV"},
-  {id:53,generic:"esomeprazole",brand:"Nexium",use:"GERD",class:"Proton Pump Inhibitor",schedule:null,notes:"S-isomer of omeprazole. Take 30–60 min before meals.",route:"Oral"},
-  {id:54,generic:"lansoprazole",brand:"Prevacid",use:"GERD, ulcers",class:"Proton Pump Inhibitor",schedule:null,notes:"Swallow capsule whole or open and sprinkle on food.",route:"Oral"},
-  {id:55,generic:"famotidine",brand:"Pepcid",use:"GERD, heartburn",class:"H2 Receptor Antagonist",schedule:null,notes:"Less drug interactions than cimetidine.",route:"Oral"},
-  {id:56,generic:"ondansetron",brand:"Zofran",use:"Nausea/vomiting",class:"5-HT3 Antagonist",schedule:null,notes:"QT prolongation risk at high IV doses. Serotonin syndrome risk.",route:"Oral/IV"},
-  {id:57,generic:"promethazine",brand:"Phenergan",use:"Nausea/vomiting, allergies",class:"Antiemetic/Antihistamine",schedule:null,notes:"Black box: IV use can cause severe tissue injury.",route:"Oral/IM"},
-  {id:58,generic:"metoclopramide",brand:"Reglan",use:"GERD, gastroparesis",class:"Prokinetic/Antiemetic",schedule:null,notes:"Black box: risk of tardive dyskinesia with long-term use.",route:"Oral"},
-  {id:59,generic:"amoxicillin",brand:"Amoxil",use:"Bacterial infections",class:"Penicillin Antibiotic",schedule:null,notes:"Check for penicillin allergy. Take full course.",route:"Oral"},
-  {id:60,generic:"amoxicillin-clavulanate",brand:"Augmentin",use:"Bacterial infections",class:"Penicillin + Beta-Lactamase Inhibitor",schedule:null,notes:"Broader spectrum. Take with food. Diarrhea common.",route:"Oral"},
-  {id:61,generic:"azithromycin",brand:"Zithromax",use:"Bacterial infections",class:"Macrolide Antibiotic",schedule:null,notes:"QT prolongation risk. Many drug interactions.",route:"Oral/IV"},
-  {id:62,generic:"doxycycline",brand:"Vibramycin",use:"Bacterial infections, acne",class:"Tetracycline Antibiotic",schedule:null,notes:"Take with full glass of water, remain upright 30 min. Photosensitivity.",route:"Oral"},
-  {id:63,generic:"cephalexin",brand:"Keflex",use:"Bacterial infections",class:"Cephalosporin",schedule:null,notes:"Cross-sensitivity with penicillins possible (~1–2%).",route:"Oral"},
-  {id:64,generic:"cefdinir",brand:"Omnicef",use:"Bacterial infections",class:"Cephalosporin",schedule:null,notes:"Broad spectrum. Red stools possible if taken with iron.",route:"Oral"},
-  {id:65,generic:"levofloxacin",brand:"Levaquin",use:"Bacterial infections",class:"Fluoroquinolone",schedule:null,notes:"Black box: tendon rupture, neuropathy. QT prolongation.",route:"Oral/IV"},
-  {id:66,generic:"ciprofloxacin",brand:"Cipro",use:"Bacterial infections",class:"Fluoroquinolone",schedule:null,notes:"Black box: tendon rupture. Avoid dairy and antacids.",route:"Oral/IV"},
-  {id:67,generic:"trimethoprim-sulfamethoxazole",brand:"Bactrim",use:"UTI, skin infections",class:"Sulfonamide Antibiotic",schedule:null,notes:"Monitor renal function. Avoid in sulfa allergy. Drink fluids.",route:"Oral"},
-  {id:68,generic:"metronidazole",brand:"Flagyl",use:"Bacterial/Parasitic infections",class:"Nitroimidazole Antibiotic",schedule:null,notes:"Avoid alcohol (disulfiram-like reaction). Metallic taste.",route:"Oral/IV"},
-  {id:69,generic:"nitrofurantoin",brand:"Macrobid",use:"Uncomplicated UTIs",class:"Nitrofuran Antibiotic",schedule:null,notes:"Take with food. Avoid in late pregnancy and renal impairment.",route:"Oral"},
-  {id:70,generic:"clindamycin",brand:"Cleocin",use:"Bacterial infections",class:"Lincosamide Antibiotic",schedule:null,notes:"Risk of C. difficile colitis.",route:"Oral/IV/Topical"},
-  {id:71,generic:"fluconazole",brand:"Diflucan",use:"Fungal infections",class:"Azole Antifungal",schedule:null,notes:"Many drug interactions (CYP inhibitor).",route:"Oral/IV"},
-  {id:72,generic:"clotrimazole",brand:"Lotrimin",use:"Topical fungal infections",class:"Azole Antifungal",schedule:null,notes:"Apply to clean dry skin.",route:"Topical"},
-  {id:73,generic:"acyclovir",brand:"Zovirax",use:"Herpes simplex, shingles",class:"Antiviral",schedule:null,notes:"Stay well hydrated (nephrotoxic in dehydration).",route:"Oral/IV"},
-  {id:74,generic:"valacyclovir",brand:"Valtrex",use:"Herpes simplex, shingles",class:"Antiviral",schedule:null,notes:"Better oral bioavailability than acyclovir.",route:"Oral"},
-  {id:75,generic:"oseltamivir",brand:"Tamiflu",use:"Influenza A and B",class:"Antiviral",schedule:null,notes:"Start within 48 hrs of symptom onset.",route:"Oral"},
-  {id:76,generic:"warfarin",brand:"Coumadin",use:"Blood clots, AFib",class:"Anticoagulant",schedule:null,notes:"Monitor INR. Antidote: Vitamin K. Narrow therapeutic index.",route:"Oral"},
-  {id:77,generic:"rivaroxaban",brand:"Xarelto",use:"Blood clots, AFib",class:"Anticoagulant",schedule:null,notes:"Take with evening meal (15/20mg). No INR monitoring needed.",route:"Oral"},
-  {id:78,generic:"apixaban",brand:"Eliquis",use:"Blood clots, AFib",class:"Anticoagulant",schedule:null,notes:"Twice daily. Less GI bleeding than rivaroxaban.",route:"Oral"},
-  {id:79,generic:"dabigatran",brand:"Pradaxa",use:"Blood clots, AFib",class:"Anticoagulant",schedule:null,notes:"Moisture-sensitive — store in original container.",route:"Oral"},
-  {id:80,generic:"heparin",brand:"Heparin",use:"Blood clots (hospital)",class:"Anticoagulant",schedule:null,notes:"Monitor aPTT. Antidote: protamine sulfate.",route:"IV/SubQ"},
-  {id:81,generic:"enoxaparin",brand:"Lovenox",use:"Blood clots",class:"Low Molecular Weight Heparin",schedule:null,notes:"SubQ injection. No routine monitoring needed.",route:"Subcutaneous"},
-  {id:82,generic:"clopidogrel",brand:"Plavix",use:"Prevention of blood clots",class:"Antiplatelet",schedule:null,notes:"Prodrug. Avoid omeprazole (reduces efficacy).",route:"Oral"},
-  {id:83,generic:"aspirin",brand:"Bayer",use:"Pain, heart attack prevention",class:"Antiplatelet/NSAID",schedule:null,notes:"Risk of GI bleeding, Reye's syndrome in children.",route:"Oral"},
-  {id:84,generic:"sertraline",brand:"Zoloft",use:"Depression, anxiety",class:"SSRI",schedule:null,notes:"Takes 4–6 weeks for full effect. Do not stop abruptly.",route:"Oral"},
-  {id:85,generic:"fluoxetine",brand:"Prozac",use:"Depression, anxiety",class:"SSRI",schedule:null,notes:"Longest half-life SSRI. Many drug interactions.",route:"Oral"},
-  {id:86,generic:"escitalopram",brand:"Lexapro",use:"Depression, anxiety",class:"SSRI",schedule:null,notes:"Well-tolerated. Avoid abrupt discontinuation.",route:"Oral"},
-  {id:87,generic:"citalopram",brand:"Celexa",use:"Depression",class:"SSRI",schedule:null,notes:"QT prolongation risk — max 40mg.",route:"Oral"},
-  {id:88,generic:"paroxetine",brand:"Paxil",use:"Depression, anxiety",class:"SSRI",schedule:null,notes:"Highest discontinuation syndrome of SSRIs. Strong CYP2D6 inhibitor.",route:"Oral"},
-  {id:89,generic:"duloxetine",brand:"Cymbalta",use:"Depression, nerve pain",class:"SNRI",schedule:null,notes:"Do not chew capsules. Can raise blood pressure.",route:"Oral"},
-  {id:90,generic:"venlafaxine",brand:"Effexor",use:"Depression, anxiety",class:"SNRI",schedule:null,notes:"Can increase blood pressure. Discontinuation syndrome is significant.",route:"Oral"},
-  {id:91,generic:"bupropion",brand:"Wellbutrin",use:"Depression, smoking cessation",class:"NDRI",schedule:null,notes:"Lowers seizure threshold. No sexual side effects.",route:"Oral"},
-  {id:92,generic:"mirtazapine",brand:"Remeron",use:"Depression, insomnia",class:"Antidepressant",schedule:null,notes:"Sedating. Weight gain and increased appetite.",route:"Oral"},
-  {id:93,generic:"trazodone",brand:"Desyrel",use:"Depression, insomnia",class:"Antidepressant",schedule:null,notes:"Commonly used for insomnia. Risk of priapism.",route:"Oral"},
-  {id:94,generic:"amitriptyline",brand:"Elavil",use:"Depression, nerve pain",class:"Tricyclic Antidepressant",schedule:null,notes:"Significant anticholinergic effects. Lethal in overdose.",route:"Oral"},
-  {id:95,generic:"nortriptyline",brand:"Pamelor",use:"Depression, nerve pain",class:"Tricyclic Antidepressant",schedule:null,notes:"Fewer anticholinergic effects than amitriptyline.",route:"Oral"},
-  {id:96,generic:"alprazolam",brand:"Xanax",use:"Anxiety, panic disorder",class:"Benzodiazepine",schedule:"Schedule IV",notes:"High abuse potential. CNS depressant.",route:"Oral"},
-  {id:97,generic:"clonazepam",brand:"Klonopin",use:"Seizures, anxiety",class:"Benzodiazepine",schedule:"Schedule IV",notes:"Longer-acting benzo. Do not stop abruptly.",route:"Oral"},
-  {id:98,generic:"lorazepam",brand:"Ativan",use:"Anxiety, seizures",class:"Benzodiazepine",schedule:"Schedule IV",notes:"Short-to-intermediate acting. No active metabolites.",route:"Oral/IV"},
-  {id:99,generic:"diazepam",brand:"Valium",use:"Anxiety, muscle spasms",class:"Benzodiazepine",schedule:"Schedule IV",notes:"Long-acting with active metabolites.",route:"Oral/IV"},
-  {id:100,generic:"zolpidem",brand:"Ambien",use:"Insomnia",class:"Sedative",schedule:"Schedule IV",notes:"Can cause complex sleep behaviors. Avoid alcohol.",route:"Oral"},
-  {id:101,generic:"gabapentin",brand:"Neurontin",use:"Seizures, nerve pain",class:"Anticonvulsant",schedule:"Schedule V (some states)",notes:"Drowsiness and dizziness. Do not stop abruptly.",route:"Oral"},
-  {id:102,generic:"pregabalin",brand:"Lyrica",use:"Nerve pain, fibromyalgia",class:"Anticonvulsant",schedule:"Schedule V",notes:"Weight gain, dizziness. Do not stop abruptly.",route:"Oral"},
-  {id:103,generic:"topiramate",brand:"Topamax",use:"Seizures, migraine prevention",class:"Anticonvulsant",schedule:null,notes:"Causes kidney stones. Cognitive effects.",route:"Oral"},
-  {id:104,generic:"valproic acid",brand:"Depakote",use:"Seizures, bipolar disorder",class:"Anticonvulsant",schedule:null,notes:"Teratogenic (black box). Monitor liver function.",route:"Oral"},
-  {id:105,generic:"lamotrigine",brand:"Lamictal",use:"Seizures, bipolar disorder",class:"Anticonvulsant",schedule:null,notes:"Titrate slowly to reduce Stevens-Johnson syndrome rash risk.",route:"Oral"},
-  {id:106,generic:"levetiracetam",brand:"Keppra",use:"Seizures",class:"Anticonvulsant",schedule:null,notes:"Minimal drug interactions. Behavioral/mood side effects.",route:"Oral/IV"},
-  {id:107,generic:"phenytoin",brand:"Dilantin",use:"Seizures",class:"Anticonvulsant",schedule:null,notes:"Narrow therapeutic index. Gingival hyperplasia.",route:"Oral/IV"},
-  {id:108,generic:"acetaminophen",brand:"Tylenol",use:"Pain, fever",class:"Analgesic",schedule:null,notes:"Max 4g/day. Antidote: N-acetylcysteine (NAC).",route:"Oral/IV"},
-  {id:109,generic:"ibuprofen",brand:"Advil, Motrin",use:"Pain, inflammation",class:"NSAID",schedule:null,notes:"Take with food. GI ulcer risk.",route:"Oral"},
-  {id:110,generic:"naproxen",brand:"Aleve",use:"Pain, inflammation",class:"NSAID",schedule:null,notes:"Longer-acting than ibuprofen. Take with food.",route:"Oral"},
-  {id:111,generic:"meloxicam",brand:"Mobic",use:"Arthritis pain",class:"NSAID",schedule:null,notes:"Take with food. GI-sparing but not risk-free.",route:"Oral"},
-  {id:112,generic:"celecoxib",brand:"Celebrex",use:"Arthritis pain",class:"NSAID",schedule:null,notes:"Less GI risk. Sulfa allergy cross-reactivity possible.",route:"Oral"},
-  {id:113,generic:"hydrocodone/acetaminophen",brand:"Vicodin, Norco",use:"Moderate to severe pain",class:"Opioid Analgesic",schedule:"Schedule II",notes:"Max APAP 4g/day. High abuse potential.",route:"Oral"},
-  {id:114,generic:"oxycodone",brand:"OxyContin",use:"Severe pain",class:"Opioid Analgesic",schedule:"Schedule II",notes:"High abuse potential. Do not crush ER form.",route:"Oral"},
-  {id:115,generic:"oxycodone/acetaminophen",brand:"Percocet",use:"Severe pain",class:"Opioid Analgesic",schedule:"Schedule II",notes:"Max APAP 4g/day. Abuse potential.",route:"Oral"},
-  {id:116,generic:"tramadol",brand:"Ultram",use:"Moderate pain",class:"Opioid Analgesic",schedule:"Schedule IV",notes:"Lowers seizure threshold. Serotonin syndrome risk.",route:"Oral"},
-  {id:117,generic:"morphine",brand:"MS Contin",use:"Severe pain",class:"Opioid Analgesic",schedule:"Schedule II",notes:"Reference standard opioid. Active metabolite accumulates in renal impairment.",route:"Oral/IV"},
-  {id:118,generic:"fentanyl",brand:"Duragesic",use:"Severe pain",class:"Opioid Analgesic",schedule:"Schedule II",notes:"Transdermal patch — change every 72 hr. Highly potent.",route:"Transdermal/IV"},
-  {id:119,generic:"codeine",brand:"Tylenol #3 (combo)",use:"Mild to moderate pain",class:"Opioid Analgesic",schedule:"Schedule II/III",notes:"Prodrug — CYP2D6 converts to morphine.",route:"Oral"},
-  {id:120,generic:"naloxone",brand:"Narcan",use:"Opioid overdose reversal",class:"Opioid Antagonist",schedule:null,notes:"Reverses opioid overdose within minutes.",route:"Nasal/IV"},
-  {id:121,generic:"cyclobenzaprine",brand:"Flexeril",use:"Muscle spasms",class:"Muscle Relaxant",schedule:null,notes:"Causes significant drowsiness. Structurally similar to TCAs.",route:"Oral"},
-  {id:122,generic:"baclofen",brand:"Lioresal",use:"Muscle spasticity",class:"Muscle Relaxant",schedule:null,notes:"Do not stop abruptly — severe withdrawal possible.",route:"Oral"},
-  {id:123,generic:"methocarbamol",brand:"Robaxin",use:"Muscle spasms",class:"Muscle Relaxant",schedule:null,notes:"May discolor urine (green/black). Sedation.",route:"Oral"},
-  {id:124,generic:"tizanidine",brand:"Zanaflex",use:"Muscle spasticity",class:"Muscle Relaxant",schedule:null,notes:"Short duration of action. Liver toxicity possible.",route:"Oral"},
-  {id:125,generic:"quetiapine",brand:"Seroquel",use:"Schizophrenia, bipolar",class:"Atypical Antipsychotic",schedule:null,notes:"Sedating. Monitor for metabolic syndrome.",route:"Oral"},
-  {id:126,generic:"aripiprazole",brand:"Abilify",use:"Schizophrenia, bipolar",class:"Atypical Antipsychotic",schedule:null,notes:"Less metabolic effects. Can cause akathisia.",route:"Oral"},
-  {id:127,generic:"risperidone",brand:"Risperdal",use:"Schizophrenia, bipolar",class:"Atypical Antipsychotic",schedule:null,notes:"Metabolic effects. Elevated prolactin levels.",route:"Oral"},
-  {id:128,generic:"olanzapine",brand:"Zyprexa",use:"Schizophrenia, bipolar",class:"Atypical Antipsychotic",schedule:null,notes:"Significant weight gain and metabolic effects.",route:"Oral"},
-  {id:129,generic:"lithium",brand:"Lithobid",use:"Bipolar disorder",class:"Mood Stabilizer",schedule:null,notes:"Narrow therapeutic index. Monitor thyroid/renal function.",route:"Oral"},
-  {id:130,generic:"methylphenidate",brand:"Ritalin, Concerta",use:"ADHD",class:"CNS Stimulant",schedule:"Schedule II",notes:"Insomnia, appetite suppression. High abuse potential.",route:"Oral"},
-  {id:131,generic:"amphetamine salts",brand:"Adderall",use:"ADHD",class:"CNS Stimulant",schedule:"Schedule II",notes:"High abuse potential. Monitor cardiovascular effects.",route:"Oral"},
-  {id:132,generic:"lisdexamfetamine",brand:"Vyvanse",use:"ADHD",class:"CNS Stimulant",schedule:"Schedule II",notes:"Prodrug — lower abuse potential. Once daily.",route:"Oral"},
-  {id:133,generic:"atomoxetine",brand:"Strattera",use:"ADHD",class:"SNRI",schedule:null,notes:"Non-stimulant. Black box: suicidal thinking in children.",route:"Oral"},
-  {id:134,generic:"alendronate",brand:"Fosamax",use:"Osteoporosis",class:"Bisphosphonate",schedule:null,notes:"Take with full glass of water, stay upright 30 min.",route:"Oral"},
-  {id:135,generic:"ibandronate",brand:"Boniva",use:"Osteoporosis",class:"Bisphosphonate",schedule:null,notes:"Monthly oral or quarterly IV. Stay upright 60 min.",route:"Oral/IV"},
-  {id:136,generic:"raloxifene",brand:"Evista",use:"Osteoporosis prevention",class:"SERM",schedule:null,notes:"Increased VTE risk. Not for premenopausal women.",route:"Oral"},
-  {id:137,generic:"estradiol",brand:"Estrace",use:"Menopausal symptoms",class:"Estrogen",schedule:null,notes:"Increased risk of DVT, stroke, endometrial cancer.",route:"Oral/Patch"},
-  {id:138,generic:"medroxyprogesterone",brand:"Provera",use:"Contraception",class:"Progestin",schedule:null,notes:"Loss of bone density with prolonged use.",route:"Oral/IM"},
-  {id:139,generic:"ethinyl estradiol/norgestimate",brand:"Ortho Tri-Cyclen",use:"Oral contraception",class:"Contraceptive",schedule:null,notes:"VTE risk. Take at same time daily.",route:"Oral"},
-  {id:140,generic:"levonorgestrel",brand:"Plan B",use:"Emergency contraception",class:"Progestin",schedule:null,notes:"Take within 72 hrs. Nausea common.",route:"Oral"},
-  {id:141,generic:"tamsulosin",brand:"Flomax",use:"BPH",class:"Alpha-1 Blocker",schedule:null,notes:"Take 30 min after same meal daily. Orthostatic hypotension.",route:"Oral"},
-  {id:142,generic:"finasteride",brand:"Proscar",use:"BPH, male pattern baldness",class:"5-Alpha Reductase Inhibitor",schedule:null,notes:"Women of childbearing age should not handle crushed tablets.",route:"Oral"},
-  {id:143,generic:"solifenacin",brand:"Vesicare",use:"Overactive bladder",class:"Anticholinergic",schedule:null,notes:"Dry mouth, constipation, blurred vision.",route:"Oral"},
-  {id:144,generic:"oxybutynin",brand:"Ditropan",use:"Overactive bladder",class:"Anticholinergic",schedule:null,notes:"Significant anticholinergic burden. Avoid in elderly.",route:"Oral/Patch"},
-  {id:145,generic:"tretinoin",brand:"Retin-A",use:"Acne",class:"Topical Retinoid",schedule:null,notes:"Apply at night. Photosensitivity.",route:"Topical"},
-  {id:146,generic:"triamcinolone",brand:"Kenalog",use:"Inflammation",class:"Corticosteroid",schedule:null,notes:"Skin atrophy with prolonged use.",route:"Topical/Injection"},
-  {id:147,generic:"hydrocortisone",brand:"Cortaid",use:"Inflammation",class:"Corticosteroid",schedule:null,notes:"Lowest potency topical steroid — safe for face.",route:"Topical"},
-  {id:148,generic:"betamethasone",brand:"Diprolene",use:"Inflammation",class:"Corticosteroid",schedule:null,notes:"High potency — avoid on face.",route:"Topical"},
-  {id:149,generic:"cetirizine",brand:"Zyrtec",use:"Allergies",class:"Antihistamine",schedule:null,notes:"May cause some drowsiness. OTC available.",route:"Oral"},
-  {id:150,generic:"loratadine",brand:"Claritin",use:"Allergies",class:"Antihistamine",schedule:null,notes:"Non-sedating. OTC. Once daily.",route:"Oral"},
-  {id:151,generic:"fexofenadine",brand:"Allegra",use:"Allergies",class:"Antihistamine",schedule:null,notes:"Truly non-sedating. Avoid taking with fruit juice.",route:"Oral"},
-  {id:152,generic:"diphenhydramine",brand:"Benadryl",use:"Allergies, insomnia",class:"Antihistamine",schedule:null,notes:"Significant sedation and anticholinergic effects.",route:"Oral"},
-  {id:153,generic:"digoxin",brand:"Lanoxin",use:"Heart failure, AFib",class:"Cardiac Glycoside",schedule:null,notes:"Narrow therapeutic index. Toxicity: nausea, vision changes.",route:"Oral/IV"},
-  {id:154,generic:"amiodarone",brand:"Cordarone",use:"Arrhythmias",class:"Antiarrhythmic",schedule:null,notes:"Many serious side effects: pulmonary, thyroid, liver.",route:"Oral/IV"},
-  {id:155,generic:"nitroglycerin",brand:"Nitrostat",use:"Angina",class:"Nitrate",schedule:null,notes:"Sublingual for acute angina. Tolerance with continuous use.",route:"Sublingual"},
-  {id:156,generic:"isosorbide mononitrate",brand:"Imdur",use:"Angina prevention",class:"Nitrate",schedule:null,notes:"Allow a nitrate-free interval to prevent tolerance.",route:"Oral"},
-  {id:157,generic:"hydralazine",brand:"Apresoline",use:"Hypertension, heart failure",class:"Vasodilator",schedule:null,notes:"Drug-induced lupus with long-term use.",route:"Oral/IV"},
-  {id:158,generic:"clonidine",brand:"Catapres",use:"Hypertension, ADHD",class:"Alpha-2 Agonist",schedule:null,notes:"Rebound hypertension if stopped abruptly.",route:"Oral/Patch"},
-  {id:159,generic:"methadone",brand:"Dolophine",use:"Opioid use disorder, pain",class:"Opioid Agonist",schedule:"Schedule II",notes:"Long/variable half-life. QT prolongation.",route:"Oral"},
-  {id:160,generic:"buprenorphine",brand:"Suboxone",use:"Opioid use disorder",class:"Partial Opioid Agonist",schedule:"Schedule III",notes:"Ceiling effect for respiratory depression.",route:"Sublingual"},
-  {id:161,generic:"cholecalciferol",brand:"Vitamin D3",use:"Vitamin D deficiency",class:"Supplement",schedule:null,notes:"Take with food (fat-soluble).",route:"Oral"},
-  {id:162,generic:"ferrous sulfate",brand:"Slow Fe",use:"Iron deficiency anemia",class:"Supplement",schedule:null,notes:"Take on empty stomach for best absorption. Stools may be dark.",route:"Oral"},
-  {id:163,generic:"folic acid",brand:"Folate",use:"Folate deficiency",class:"Supplement",schedule:null,notes:"Recommended 400–800 mcg daily in women of childbearing age.",route:"Oral"},
-  {id:164,generic:"cyanocobalamin",brand:"Vitamin B12",use:"Vitamin B12 deficiency",class:"Supplement",schedule:null,notes:"Intrinsic factor needed for oral absorption.",route:"Oral/IM"},
-  {id:165,generic:"donepezil",brand:"Aricept",use:"Alzheimer's disease",class:"Acetylcholinesterase Inhibitor",schedule:null,notes:"Take at bedtime. Bradycardia risk.",route:"Oral"},
-  {id:166,generic:"memantine",brand:"Namenda",use:"Alzheimer's disease",class:"NMDA Receptor Antagonist",schedule:null,notes:"Can be combined with donepezil.",route:"Oral"},
-  {id:167,generic:"sumatriptan",brand:"Imitrex",use:"Migraine (acute treatment)",class:"Triptan",schedule:null,notes:"Not for prevention. Contraindicated in cardiovascular disease.",route:"Oral/Nasal"},
-  {id:168,generic:"topiramate",brand:"Topamax",use:"Migraine prevention, seizures",class:"Anticonvulsant",schedule:null,notes:"Weight loss side effect. Kidney stones.",route:"Oral"},
-  {id:169,generic:"vancomycin",brand:"Vancocin",use:"MRSA, C. diff",class:"Antibiotic",schedule:null,notes:"Red man syndrome with rapid IV infusion. Nephrotoxic.",route:"Oral/IV"},
-  {id:170,generic:"linezolid",brand:"Zyvox",use:"MRSA, VRE",class:"Antibiotic",schedule:null,notes:"Serotonin syndrome risk. Avoid tyramine foods.",route:"Oral/IV"},
-  {id:171,generic:"piperacillin-tazobactam",brand:"Zosyn",use:"Hospital-acquired infections",class:"Antibiotic",schedule:null,notes:"IV only. Broad coverage including Pseudomonas.",route:"IV"},
-  {id:172,generic:"meropenem",brand:"Merrem",use:"Serious hospital infections",class:"Antibiotic",schedule:null,notes:"Broad-spectrum reserved for resistant infections.",route:"IV"},
-  {id:173,generic:"latanoprost",brand:"Xalatan",use:"Glaucoma",class:"Ophthalmic",schedule:null,notes:"Refrigerate until opened. May change iris color.",route:"Ophthalmic"},
-  {id:174,generic:"timolol",brand:"Timoptic",use:"Glaucoma",class:"Ophthalmic",schedule:null,notes:"Systemic absorption can occur — avoid in COPD/asthma.",route:"Ophthalmic"},
-  {id:175,generic:"ondansetron",brand:"Zofran",use:"Nausea/vomiting",class:"Antiemetic",schedule:null,notes:"QT prolongation at high doses.",route:"Oral/IV"},
-  {id:176,generic:"dexamethasone",brand:"Decadron",use:"Inflammation",class:"Corticosteroid",schedule:null,notes:"Most potent commonly used corticosteroid.",route:"Oral/IV"},
-  {id:177,generic:"prednisone",brand:"Deltasone",use:"Inflammation",class:"Corticosteroid",schedule:null,notes:"Take with food. Taper dose.",route:"Oral"},
-  {id:178,generic:"methylprednisolone",brand:"Medrol",use:"Severe inflammation",class:"Corticosteroid",schedule:null,notes:"Available as Dose Pack.",route:"Oral/IV"},
-  {id:179,generic:"allopurinol",brand:"Zyloprim",use:"Gout prevention",class:"Xanthine Oxidase Inhibitor",schedule:null,notes:"Drink plenty of fluids. Rash possible.",route:"Oral"},
-  {id:180,generic:"colchicine",brand:"Colcrys",use:"Acute gout",class:"Anti-Gout Agent",schedule:null,notes:"GI side effects dose-limiting.",route:"Oral"},
-  {id:181,generic:"sildenafil",brand:"Viagra",use:"Erectile dysfunction",class:"PDE-5 Inhibitor",schedule:null,notes:"Avoid with nitrates (fatal hypotension).",route:"Oral"},
-  {id:182,generic:"tadalafil",brand:"Cialis",use:"Erectile dysfunction",class:"PDE-5 Inhibitor",schedule:null,notes:"Longest duration (~36 hrs). Avoid with nitrates.",route:"Oral"},
-  {id:183,generic:"hydroxychloroquine",brand:"Plaquenil",use:"Lupus, rheumatoid arthritis",class:"DMARD",schedule:null,notes:"Monitor eyes — retinal toxicity with long-term use.",route:"Oral"},
-  {id:184,generic:"methotrexate",brand:"Trexall",use:"Rheumatoid arthritis",class:"DMARD",schedule:null,notes:"Weekly dosing for RA. Folic acid supplementation required.",route:"Oral"},
-  {id:185,generic:"adalimumab",brand:"Humira",use:"Rheumatoid arthritis",class:"DMARD",schedule:null,notes:"Subq injection. Increased infection risk.",route:"Subcutaneous"},
-  {id:186,generic:"pantoprazole sodium",brand:"Protonix IV",use:"GERD",class:"Proton Pump Inhibitor",schedule:null,notes:"IV infusion in hospital setting.",route:"IV"},
-  {id:187,generic:"levocetirizine",brand:"Xyzal",use:"Allergies",class:"Antihistamine",schedule:null,notes:"R-enantiomer of cetirizine.",route:"Oral"},
-  {id:188,generic:"desloratadine",brand:"Clarinex",use:"Allergies",class:"Antihistamine",schedule:null,notes:"Active metabolite of loratadine.",route:"Oral"},
-  {id:189,generic:"meclizine",brand:"Antivert",use:"Vertigo, motion sickness",class:"Antihistamine",schedule:null,notes:"OTC for motion sickness. Causes drowsiness.",route:"Oral"},
-  {id:190,generic:"olopatadine",brand:"Pataday",use:"Allergic conjunctivitis",class:"Ophthalmic",schedule:null,notes:"Eye drops. OTC available.",route:"Ophthalmic"},
-  {id:191,generic:"sodium chloride 0.9%",brand:"Normal Saline",use:"IV fluid replacement",class:"IV Fluid",schedule:null,notes:"Most common IV fluid. Isotonic.",route:"IV"},
-  {id:192,generic:"potassium chloride",brand:"K-Dur",use:"Hypokalemia",class:"Supplement",schedule:null,notes:"Take with full glass of water. Never give IV push.",route:"Oral/IV"},
-  {id:193,generic:"magnesium sulfate",brand:"Epsom Salt",use:"Pre-eclampsia, hypomagnesemia",class:"Electrolyte",schedule:null,notes:"Monitor Mg levels. Antidote: calcium gluconate.",route:"IV/IM"},
-  {id:194,generic:"ketorolac",brand:"Toradol",use:"Short-term severe pain",class:"NSAID",schedule:null,notes:"Max 5 days use (systemic). Avoid in renal impairment.",route:"IM/IV/Oral"},
-  {id:195,generic:"lidocaine",brand:"Xylocaine",use:"Local anesthesia",class:"Local Anesthetic",schedule:null,notes:"CNS and cardiac toxicity with overdose.",route:"Topical/IV"},
-  {id:196,generic:"epinephrine",brand:"EpiPen",use:"Anaphylaxis",class:"Catecholamine",schedule:null,notes:"Inject into outer thigh. Always follow with ER visit.",route:"IM"},
-  {id:197,generic:"diphenhydramine",brand:"Benadryl",use:"Allergic reactions",class:"Antihistamine",schedule:null,notes:"Significant sedation and anticholinergic effects.",route:"Oral/IV/IM"},
-  {id:198,generic:"methylnaltrexone",brand:"Relistor",use:"Opioid-induced constipation",class:"Opioid Antagonist",schedule:null,notes:"Does not reverse analgesia (does not cross BBB).",route:"Subcutaneous"},
-  {id:199,generic:"senna",brand:"Senokot",use:"Constipation",class:"Stimulant Laxative",schedule:null,notes:"Take with water. May cause cramping.",route:"Oral"},
-  {id:200,generic:"polyethylene glycol 3350",brand:"MiraLax",use:"Constipation",class:"Osmotic Laxative",schedule:null,notes:"Dissolve in 8 oz of liquid. Works in 1–3 days.",route:"Oral"}
-];
+const DRUGS = [  {id:1,generic:"lisinopril",brand:"Prinivil, Zestril",use:"Hypertension, heart failure, post-MI",class:"ACE Inhibitor",schedule:null,notes:"Monitor for dry cough and hyperkalemia. Do not use in pregnancy.",route:"Oral"},   {id:2,generic:"enalapril",brand:"Vasotec",use:"Hypertension, heart failure",class:"ACE Inhibitor",schedule:null,notes:"Prodrug converted to enalaprilat. Same cough risk as other ACE inhibitors. Avoid in pregnancy.",route:"Oral/IV"},   {id:3,generic:"ramipril",brand:"Altace",use:"Hypertension, heart failure, post-MI, diabetic nephropathy",class:"ACE Inhibitor",schedule:null,notes:"Well-studied post-MI. Dry cough and angioedema possible.",route:"Oral"},   {id:4,generic:"benazepril",brand:"Lotensin",use:"Hypertension",class:"ACE Inhibitor",schedule:null,notes:"Prodrug. Cough side effect. Monitor renal function and potassium.",route:"Oral"},   {id:5,generic:"losartan",brand:"Cozaar",use:"Hypertension, diabetic nephropathy",class:"ARB",schedule:null,notes:"No cough (unlike ACE inhibitors). Avoid in pregnancy.",route:"Oral"},   {id:6,generic:"valsartan",brand:"Diovan",use:"Hypertension, heart failure, post-MI",class:"ARB",schedule:null,notes:"Can be used in ACE inhibitor-intolerant patients. Avoid in pregnancy.",route:"Oral"},   {id:7,generic:"olmesartan",brand:"Benicar",use:"Hypertension",class:"ARB",schedule:null,notes:"Can cause sprue-like enteropathy with long-term use.",route:"Oral"},   {id:8,generic:"irbesartan",brand:"Avapro",use:"Hypertension, diabetic nephropathy",class:"ARB",schedule:null,notes:"Renal protection in Type 2 diabetes. Avoid in pregnancy.",route:"Oral"},   {id:9,generic:"metoprolol succinate",brand:"Toprol-XL",use:"Hypertension, heart failure, angina",class:"Beta Blocker",schedule:null,notes:"Extended-release. Do not crush. Taper to discontinue. Once-daily.",route:"Oral"},   {id:10,generic:"metoprolol tartrate",brand:"Lopressor",use:"Hypertension, angina, post-MI",class:"Beta Blocker",schedule:null,notes:"Immediate-release. Twice daily. Do not stop abruptly.",route:"Oral"},   {id:11,generic:"atenolol",brand:"Tenormin",use:"Hypertension, angina, arrhythmias",class:"Beta Blocker",schedule:null,notes:"Less CNS penetration. Dose adjust in renal impairment.",route:"Oral"},   {id:12,generic:"carvedilol",brand:"Coreg",use:"Heart failure, hypertension, post-MI",class:"Alpha/Beta Blocker",schedule:null,notes:"Take with food to reduce hypotension. Non-selective — use caution in asthma/COPD.",route:"Oral"},   {id:13,generic:"propranolol",brand:"Inderal",use:"Hypertension, angina, migraine prevention, tremor",class:"Beta Blocker",schedule:null,notes:"Crosses blood-brain barrier. Masks hypoglycemia signs in diabetics.",route:"Oral"},   {id:14,generic:"bisoprolol",brand:"Zebeta",use:"Hypertension, heart failure",class:"Beta Blocker",schedule:null,notes:"High cardioselectivity. Once daily. Do not stop abruptly.",route:"Oral"},   {id:15,generic:"amlodipine",brand:"Norvasc",use:"Hypertension, angina",class:"Calcium Channel Blocker",schedule:null,notes:"Long half-life. Common side effect: peripheral edema.",route:"Oral"},   {id:16,generic:"diltiazem",brand:"Cardizem",use:"Hypertension, angina, arrhythmias",class:"Calcium Channel Blocker",schedule:null,notes:"Slows heart rate. Do not crush extended-release. CYP3A4 interactions.",route:"Oral/IV"},   {id:17,generic:"verapamil",brand:"Calan",use:"Hypertension, angina, arrhythmias",class:"Calcium Channel Blocker",schedule:null,notes:"Most potent negative chronotrope. Causes constipation. Interacts with digoxin.",route:"Oral/IV"},   {id:18,generic:"nifedipine",brand:"Procardia",use:"Hypertension, angina, Raynaud's phenomenon",class:"Calcium Channel Blocker",schedule:null,notes:"Do not crush XL form. Reflex tachycardia with immediate-release.",route:"Oral"},   {id:19,generic:"hydrochlorothiazide",brand:"Microzide",use:"Hypertension, edema",class:"Thiazide Diuretic",schedule:null,notes:"Can deplete potassium. Take in morning. Photosensitivity possible.",route:"Oral"},   {id:20,generic:"furosemide",brand:"Lasix",use:"Edema, heart failure, hypertension",class:"Loop Diuretic",schedule:null,notes:"Potent diuretic. Monitor potassium. Ototoxic at high doses.",route:"Oral/IV"},   {id:21,generic:"spironolactone",brand:"Aldactone",use:"Heart failure, hypertension, edema",class:"Potassium-Sparing Diuretic",schedule:null,notes:"Monitor potassium — can cause hyperkalemia. Gynecomastia in men.",route:"Oral"},   {id:22,generic:"chlorthalidone",brand:"Thalitone",use:"Hypertension, edema",class:"Thiazide-Like Diuretic",schedule:null,notes:"Longer-acting than HCTZ. Preferred by JNC guidelines.",route:"Oral"},   {id:23,generic:"torsemide",brand:"Demadex",use:"Edema, heart failure",class:"Loop Diuretic",schedule:null,notes:"Better oral bioavailability than furosemide. Monitor electrolytes.",route:"Oral/IV"},   {id:24,generic:"atorvastatin",brand:"Lipitor",use:"Hyperlipidemia",class:"Statin",schedule:null,notes:"Take at any time of day. Monitor for myopathy. Avoid grapefruit juice.",route:"Oral"},   {id:25,generic:"simvastatin",brand:"Zocor",use:"Hyperlipidemia",class:"Statin",schedule:null,notes:"Take in evening. 80mg dose not recommended due to myopathy risk.",route:"Oral"},   {id:26,generic:"rosuvastatin",brand:"Crestor",use:"Hyperlipidemia",class:"Statin",schedule:null,notes:"Most potent statin. Not significantly metabolized by CYP3A4.",route:"Oral"},   {id:27,generic:"pravastatin",brand:"Pravachol",use:"Hyperlipidemia",class:"Statin",schedule:null,notes:"Fewer drug interactions. Safe with grapefruit. Give at bedtime.",route:"Oral"},   {id:28,generic:"lovastatin",brand:"Mevacor",use:"Hyperlipidemia",class:"Statin",schedule:null,notes:"Must be taken with food (evening meal). Avoid grapefruit.",route:"Oral"},   {id:29,generic:"metformin",brand:"Glucophage",use:"Type 2 diabetes",class:"Biguanide",schedule:null,notes:"Take with food. Hold before contrast dye. Risk of lactic acidosis. First-line T2DM.",route:"Oral"},   {id:30,generic:"glipizide",brand:"Glucotrol",use:"Type 2 diabetes",class:"Sulfonylurea",schedule:null,notes:"Take 30 min before meal. Hypoglycemia risk. Avoid alcohol.",route:"Oral"},   {id:31,generic:"glimepiride",brand:"Amaryl",use:"Type 2 diabetes",class:"Sulfonylurea",schedule:null,notes:"Once daily with first meal. Risk of hypoglycemia.",route:"Oral"},   {id:32,generic:"glyburide",brand:"DiaBeta",use:"Type 2 diabetes",class:"Sulfonylurea",schedule:null,notes:"Highest risk of hypoglycemia among sulfonylureas. Avoid in elderly.",route:"Oral"},   {id:33,generic:"sitagliptin",brand:"Januvia",use:"Type 2 diabetes",class:"DPP-4 Inhibitor",schedule:null,notes:"Once daily. Low hypoglycemia risk when used alone.",route:"Oral"},   {id:34,generic:"pioglitazone",brand:"Actos",use:"Type 2 diabetes",class:"Thiazolidinedione",schedule:null,notes:"Edema and weight gain. Risk of heart failure. Not for CHF patients.",route:"Oral"},   {id:35,generic:"empagliflozin",brand:"Jardiance",use:"Type 2 diabetes, heart failure",class:"SGLT-2 Inhibitor",schedule:null,notes:"Causes glucosuria. Risk of UTI and genital yeast infections.",route:"Oral"},   {id:36,generic:"liraglutide",brand:"Victoza",use:"Type 2 diabetes, obesity",class:"GLP-1 Receptor Agonist",schedule:null,notes:"Inject subcutaneously. Risk of pancreatitis. Nausea common.",route:"Subcutaneous"},   {id:37,generic:"insulin glargine",brand:"Lantus",use:"Type 1 and Type 2 diabetes",class:"Long-Acting Insulin",schedule:null,notes:"Once daily at same time. Do NOT mix with other insulins. Clear solution.",route:"Subcutaneous"},   {id:38,generic:"insulin aspart",brand:"NovoLog",use:"Type 1 and Type 2 diabetes",class:"Rapid-Acting Insulin",schedule:null,notes:"Inject 5–10 min before meals. Onset ~15 min.",route:"Subcutaneous"},   {id:39,generic:"insulin lispro",brand:"Humalog",use:"Type 1 and Type 2 diabetes",class:"Rapid-Acting Insulin",schedule:null,notes:"Inject 15 min before or immediately after meals.",route:"Subcutaneous"},   {id:40,generic:"insulin NPH",brand:"Humulin N",use:"Type 1 and Type 2 diabetes",class:"Intermediate-Acting Insulin",schedule:null,notes:"Cloudy suspension — roll gently to mix. Twice daily typically.",route:"Subcutaneous"},   {id:41,generic:"levothyroxine",brand:"Synthroid",use:"Hypothyroidism",class:"Thyroid Hormone",schedule:null,notes:"Take on empty stomach 30–60 min before breakfast. Narrow therapeutic index.",route:"Oral"},   {id:42,generic:"methimazole",brand:"Tapazole",use:"Hyperthyroidism",class:"Antithyroid Agent",schedule:null,notes:"Can cause agranulocytosis. Black box: hepatotoxicity.",route:"Oral"},   {id:43,generic:"albuterol",brand:"ProAir, Ventolin",use:"Asthma, COPD (rescue)",class:"Beta-2 Agonist",schedule:null,notes:"Shake before use. Rinse mouth after inhaler. Can cause tremors.",route:"Inhaled"},   {id:44,generic:"fluticasone",brand:"Flonase, Flovent",use:"Allergic rhinitis, asthma",class:"Corticosteroid",schedule:null,notes:"Rinse mouth after inhaled use to prevent oral candidiasis.",route:"Inhaled/Nasal"},   {id:45,generic:"budesonide",brand:"Pulmicort",use:"Asthma, allergic rhinitis",class:"Corticosteroid",schedule:null,notes:"Rinse mouth after inhaled use. Less systemic absorption.",route:"Inhaled/Nasal"},   {id:46,generic:"montelukast",brand:"Singulair",use:"Asthma prevention, allergic rhinitis",class:"Leukotriene Receptor Antagonist",schedule:null,notes:"Take in evening. FDA black box: neuropsychiatric events.",route:"Oral"},   {id:47,generic:"tiotropium",brand:"Spiriva",use:"COPD maintenance",class:"Anticholinergic",schedule:null,notes:"HandiHaler device — once daily. Do not swallow capsule.",route:"Inhaled"},   {id:48,generic:"salmeterol",brand:"Serevent",use:"Asthma maintenance, COPD",class:"Beta-2 Agonist",schedule:null,notes:"Black box: increased asthma death risk if used without ICS.",route:"Inhaled"},   {id:49,generic:"fluticasone/salmeterol",brand:"Advair Diskus",use:"Asthma, COPD maintenance",class:"ICS/LABA Combination",schedule:null,notes:"Rinse mouth after use. Not for rescue.",route:"Inhaled"},   {id:50,generic:"ipratropium",brand:"Atrovent",use:"COPD, asthma",class:"Anticholinergic",schedule:null,notes:"Avoid in narrow-angle glaucoma. Dry mouth.",route:"Inhaled"},   {id:51,generic:"omeprazole",brand:"Prilosec",use:"GERD, stomach ulcers",class:"Proton Pump Inhibitor",schedule:null,notes:"Take 30–60 min before eating. Long-term use may reduce Mg and B12.",route:"Oral"},   {id:52,generic:"pantoprazole",brand:"Protonix",use:"GERD, erosive esophagitis",class:"Proton Pump Inhibitor",schedule:null,notes:"Take 30 min before meal. Less drug interactions than omeprazole.",route:"Oral/IV"},   {id:53,generic:"esomeprazole",brand:"Nexium",use:"GERD",class:"Proton Pump Inhibitor",schedule:null,notes:"S-isomer of omeprazole. Take 30–60 min before meals.",route:"Oral"},   {id:54,generic:"lansoprazole",brand:"Prevacid",use:"GERD, ulcers",class:"Proton Pump Inhibitor",schedule:null,notes:"Swallow capsule whole or open and sprinkle on food.",route:"Oral"},   {id:55,generic:"famotidine",brand:"Pepcid",use:"GERD, heartburn",class:"H2 Receptor Antagonist",schedule:null,notes:"Less drug interactions than cimetidine.",route:"Oral"},   {id:56,generic:"ondansetron",brand:"Zofran",use:"Nausea/vomiting",class:"5-HT3 Antagonist",schedule:null,notes:"QT prolongation risk at high IV doses. Serotonin syndrome risk.",route:"Oral/IV"},   {id:57,generic:"promethazine",brand:"Phenergan",use:"Nausea/vomiting, allergies",class:"Antiemetic/Antihistamine",schedule:null,notes:"Black box: IV use can cause severe tissue injury.",route:"Oral/IM"},   {id:58,generic:"metoclopramide",brand:"Reglan",use:"GERD, gastroparesis",class:"Prokinetic/Antiemetic",schedule:null,notes:"Black box: risk of tardive dyskinesia with long-term use.",route:"Oral"},   {id:59,generic:"amoxicillin",brand:"Amoxil",use:"Bacterial infections",class:"Penicillin Antibiotic",schedule:null,notes:"Check for penicillin allergy. Take full course.",route:"Oral"},   {id:60,generic:"amoxicillin-clavulanate",brand:"Augmentin",use:"Bacterial infections",class:"Penicillin + Beta-Lactamase Inhibitor",schedule:null,notes:"Broader spectrum. Take with food. Diarrhea common.",route:"Oral"},   {id:61,generic:"azithromycin",brand:"Zithromax",use:"Bacterial infections",class:"Macrolide Antibiotic",schedule:null,notes:"QT prolongation risk. Many drug interactions.",route:"Oral/IV"},   {id:62,generic:"doxycycline",brand:"Vibramycin",use:"Bacterial infections, acne",class:"Tetracycline Antibiotic",schedule:null,notes:"Take with full glass of water, remain upright 30 min. Photosensitivity.",route:"Oral"},   {id:63,generic:"cephalexin",brand:"Keflex",use:"Bacterial infections",class:"Cephalosporin",schedule:null,notes:"Cross-sensitivity with penicillins possible (~1–2%).",route:"Oral"},   {id:64,generic:"cefdinir",brand:"Omnicef",use:"Bacterial infections",class:"Cephalosporin",schedule:null,notes:"Broad spectrum. Red stools possible if taken with iron.",route:"Oral"},   {id:65,generic:"levofloxacin",brand:"Levaquin",use:"Bacterial infections",class:"Fluoroquinolone",schedule:null,notes:"Black box: tendon rupture, neuropathy. QT prolongation.",route:"Oral/IV"},   {id:66,generic:"ciprofloxacin",brand:"Cipro",use:"Bacterial infections",class:"Fluoroquinolone",schedule:null,notes:"Black box: tendon rupture. Avoid dairy and antacids.",route:"Oral/IV"},   {id:67,generic:"trimethoprim-sulfamethoxazole",brand:"Bactrim",use:"UTI, skin infections",class:"Sulfonamide Antibiotic",schedule:null,notes:"Monitor renal function. Avoid in sulfa allergy. Drink fluids.",route:"Oral"},   {id:68,generic:"metronidazole",brand:"Flagyl",use:"Bacterial/Parasitic infections",class:"Nitroimidazole Antibiotic",schedule:null,notes:"Avoid alcohol (disulfiram-like reaction). Metallic taste.",route:"Oral/IV"},   {id:69,generic:"nitrofurantoin",brand:"Macrobid",use:"Uncomplicated UTIs",class:"Nitrofuran Antibiotic",schedule:null,notes:"Take with food. Avoid in late pregnancy and renal impairment.",route:"Oral"},   {id:70,generic:"clindamycin",brand:"Cleocin",use:"Bacterial infections",class:"Lincosamide Antibiotic",schedule:null,notes:"Risk of C. difficile colitis.",route:"Oral/IV/Topical"},   {id:71,generic:"fluconazole",brand:"Diflucan",use:"Fungal infections",class:"Azole Antifungal",schedule:null,notes:"Many drug interactions (CYP inhibitor).",route:"Oral/IV"},   {id:72,generic:"clotrimazole",brand:"Lotrimin",use:"Topical fungal infections",class:"Azole Antifungal",schedule:null,notes:"Apply to clean dry skin.",route:"Topical"},   {id:73,generic:"acyclovir",brand:"Zovirax",use:"Herpes simplex, shingles",class:"Antiviral",schedule:null,notes:"Stay well hydrated (nephrotoxic in dehydration).",route:"Oral/IV"},   {id:74,generic:"valacyclovir",brand:"Valtrex",use:"Herpes simplex, shingles",class:"Antiviral",schedule:null,notes:"Better oral bioavailability than acyclovir.",route:"Oral"},   {id:75,generic:"oseltamivir",brand:"Tamiflu",use:"Influenza A and B",class:"Antiviral",schedule:null,notes:"Start within 48 hrs of symptom onset.",route:"Oral"},   {id:76,generic:"warfarin",brand:"Coumadin",use:"Blood clots, AFib",class:"Anticoagulant",schedule:null,notes:"Monitor INR. Antidote: Vitamin K. Narrow therapeutic index.",route:"Oral"},   {id:77,generic:"rivaroxaban",brand:"Xarelto",use:"Blood clots, AFib",class:"Anticoagulant",schedule:null,notes:"Take with evening meal (15/20mg). No INR monitoring needed.",route:"Oral"},   {id:78,generic:"apixaban",brand:"Eliquis",use:"Blood clots, AFib",class:"Anticoagulant",schedule:null,notes:"Twice daily. Less GI bleeding than rivaroxaban.",route:"Oral"},   {id:79,generic:"dabigatran",brand:"Pradaxa",use:"Blood clots, AFib",class:"Anticoagulant",schedule:null,notes:"Moisture-sensitive — store in original container.",route:"Oral"},   {id:80,generic:"heparin",brand:"Heparin",use:"Blood clots (hospital)",class:"Anticoagulant",schedule:null,notes:"Monitor aPTT. Antidote: protamine sulfate.",route:"IV/SubQ"},   {id:81,generic:"enoxaparin",brand:"Lovenox",use:"Blood clots",class:"Low Molecular Weight Heparin",schedule:null,notes:"SubQ injection. No routine monitoring needed.",route:"Subcutaneous"},   {id:82,generic:"clopidogrel",brand:"Plavix",use:"Prevention of blood clots",class:"Antiplatelet",schedule:null,notes:"Prodrug. Avoid omeprazole (reduces efficacy).",route:"Oral"},   {id:83,generic:"aspirin",brand:"Bayer",use:"Pain, heart attack prevention",class:"Antiplatelet/NSAID",schedule:null,notes:"Risk of GI bleeding, Reye's syndrome in children.",route:"Oral"},   {id:84,generic:"sertraline",brand:"Zoloft",use:"Depression, anxiety",class:"SSRI",schedule:null,notes:"Takes 4–6 weeks for full effect. Do not stop abruptly.",route:"Oral"},   {id:85,generic:"fluoxetine",brand:"Prozac",use:"Depression, anxiety",class:"SSRI",schedule:null,notes:"Longest half-life SSRI. Many drug interactions.",route:"Oral"},   {id:86,generic:"escitalopram",brand:"Lexapro",use:"Depression, anxiety",class:"SSRI",schedule:null,notes:"Well-tolerated. Avoid abrupt discontinuation.",route:"Oral"},   {id:87,generic:"citalopram",brand:"Celexa",use:"Depression",class:"SSRI",schedule:null,notes:"QT prolongation risk — max 40mg.",route:"Oral"},   {id:88,generic:"paroxetine",brand:"Paxil",use:"Depression, anxiety",class:"SSRI",schedule:null,notes:"Highest discontinuation syndrome of SSRIs. Strong CYP2D6 inhibitor.",route:"Oral"},   {id:89,generic:"duloxetine",brand:"Cymbalta",use:"Depression, nerve pain",class:"SNRI",schedule:null,notes:"Do not chew capsules. Can raise blood pressure.",route:"Oral"},   {id:90,generic:"venlafaxine",brand:"Effexor",use:"Depression, anxiety",class:"SNRI",schedule:null,notes:"Can increase blood pressure. Discontinuation syndrome is significant.",route:"Oral"},   {id:91,generic:"bupropion",brand:"Wellbutrin",use:"Depression, smoking cessation",class:"NDRI",schedule:null,notes:"Lowers seizure threshold. No sexual side effects.",route:"Oral"},   {id:92,generic:"mirtazapine",brand:"Remeron",use:"Depression, insomnia",class:"Antidepressant",schedule:null,notes:"Sedating. Weight gain and increased appetite.",route:"Oral"},   {id:93,generic:"trazodone",brand:"Desyrel",use:"Depression, insomnia",class:"Antidepressant",schedule:null,notes:"Commonly used for insomnia. Risk of priapism.",route:"Oral"},   {id:94,generic:"amitriptyline",brand:"Elavil",use:"Depression, nerve pain",class:"Tricyclic Antidepressant",schedule:null,notes:"Significant anticholinergic effects. Lethal in overdose.",route:"Oral"},   {id:95,generic:"nortriptyline",brand:"Pamelor",use:"Depression, nerve pain",class:"Tricyclic Antidepressant",schedule:null,notes:"Fewer anticholinergic effects than amitriptyline.",route:"Oral"},   {id:96,generic:"alprazolam",brand:"Xanax",use:"Anxiety, panic disorder",class:"Benzodiazepine",schedule:"Schedule IV",notes:"High abuse potential. CNS depressant.",route:"Oral"},   {id:97,generic:"clonazepam",brand:"Klonopin",use:"Seizures, anxiety",class:"Benzodiazepine",schedule:"Schedule IV",notes:"Longer-acting benzo. Do not stop abruptly.",route:"Oral"},   {id:98,generic:"lorazepam",brand:"Ativan",use:"Anxiety, seizures",class:"Benzodiazepine",schedule:"Schedule IV",notes:"Short-to-intermediate acting. No active metabolites.",route:"Oral/IV"},   {id:99,generic:"diazepam",brand:"Valium",use:"Anxiety, muscle spasms",class:"Benzodiazepine",schedule:"Schedule IV",notes:"Long-acting with active metabolites.",route:"Oral/IV"},   {id:100,generic:"zolpidem",brand:"Ambien",use:"Insomnia",class:"Sedative",schedule:"Schedule IV",notes:"Can cause complex sleep behaviors. Avoid alcohol.",route:"Oral"},   {id:101,generic:"gabapentin",brand:"Neurontin",use:"Seizures, nerve pain",class:"Anticonvulsant",schedule:"Schedule V (some states)",notes:"Drowsiness and dizziness. Do not stop abruptly.",route:"Oral"},   {id:102,generic:"pregabalin",brand:"Lyrica",use:"Nerve pain, fibromyalgia",class:"Anticonvulsant",schedule:"Schedule V",notes:"Weight gain, dizziness. Do not stop abruptly.",route:"Oral"},   {id:103,generic:"topiramate",brand:"Topamax",use:"Seizures, migraine prevention",class:"Anticonvulsant",schedule:null,notes:"Causes kidney stones. Cognitive effects.",route:"Oral"},   {id:104,generic:"valproic acid",brand:"Depakote",use:"Seizures, bipolar disorder",class:"Anticonvulsant",schedule:null,notes:"Teratogenic (black box). Monitor liver function.",route:"Oral"},   {id:105,generic:"lamotrigine",brand:"Lamictal",use:"Seizures, bipolar disorder",class:"Anticonvulsant",schedule:null,notes:"Titrate slowly to reduce Stevens-Johnson syndrome rash risk.",route:"Oral"},   {id:106,generic:"levetiracetam",brand:"Keppra",use:"Seizures",class:"Anticonvulsant",schedule:null,notes:"Minimal drug interactions. Behavioral/mood side effects.",route:"Oral/IV"},   {id:107,generic:"phenytoin",brand:"Dilantin",use:"Seizures",class:"Anticonvulsant",schedule:null,notes:"Narrow therapeutic index. Gingival hyperplasia.",route:"Oral/IV"},   {id:108,generic:"acetaminophen",brand:"Tylenol",use:"Pain, fever",class:"Analgesic",schedule:null,notes:"Max 4g/day. Antidote: N-acetylcysteine (NAC).",route:"Oral/IV"},   {id:109,generic:"ibuprofen",brand:"Advil, Motrin",use:"Pain, inflammation",class:"NSAID",schedule:null,notes:"Take with food. GI ulcer risk.",route:"Oral"},   {id:110,generic:"naproxen",brand:"Aleve",use:"Pain, inflammation",class:"NSAID",schedule:null,notes:"Longer-acting than ibuprofen. Take with food.",route:"Oral"},   {id:111,generic:"meloxicam",brand:"Mobic",use:"Arthritis pain",class:"NSAID",schedule:null,notes:"Take with food. GI-sparing but not risk-free.",route:"Oral"},   {id:112,generic:"celecoxib",brand:"Celebrex",use:"Arthritis pain",class:"NSAID",schedule:null,notes:"Less GI risk. Sulfa allergy cross-reactivity possible.",route:"Oral"},   {id:113,generic:"hydrocodone/acetaminophen",brand:"Vicodin, Norco",use:"Moderate to severe pain",class:"Opioid Analgesic",schedule:"Schedule II",notes:"Max APAP 4g/day. High abuse potential.",route:"Oral"},   {id:114,generic:"oxycodone",brand:"OxyContin",use:"Severe pain",class:"Opioid Analgesic",schedule:"Schedule II",notes:"High abuse potential. Do not crush ER form.",route:"Oral"},   {id:115,generic:"oxycodone/acetaminophen",brand:"Percocet",use:"Severe pain",class:"Opioid Analgesic",schedule:"Schedule II",notes:"Max APAP 4g/day. Abuse potential.",route:"Oral"},   {id:116,generic:"tramadol",brand:"Ultram",use:"Moderate pain",class:"Opioid Analgesic",schedule:"Schedule IV",notes:"Lowers seizure threshold. Serotonin syndrome risk.",route:"Oral"},   {id:117,generic:"morphine",brand:"MS Contin",use:"Severe pain",class:"Opioid Analgesic",schedule:"Schedule II",notes:"Reference standard opioid. Active metabolite accumulates in renal impairment.",route:"Oral/IV"},   {id:118,generic:"fentanyl",brand:"Duragesic",use:"Severe pain",class:"Opioid Analgesic",schedule:"Schedule II",notes:"Transdermal patch — change every 72 hr. Highly potent.",route:"Transdermal/IV"},   {id:119,generic:"codeine",brand:"Tylenol #3 (combo)",use:"Mild to moderate pain",class:"Opioid Analgesic",schedule:"Schedule II/III",notes:"Prodrug — CYP2D6 converts to morphine.",route:"Oral"},   {id:120,generic:"naloxone",brand:"Narcan",use:"Opioid overdose reversal",class:"Opioid Antagonist",schedule:null,notes:"Reverses opioid overdose within minutes.",route:"Nasal/IV"},   {id:121,generic:"cyclobenzaprine",brand:"Flexeril",use:"Muscle spasms",class:"Muscle Relaxant",schedule:null,notes:"Causes significant drowsiness. Structurally similar to TCAs.",route:"Oral"},   {id:122,generic:"baclofen",brand:"Lioresal",use:"Muscle spasticity",class:"Muscle Relaxant",schedule:null,notes:"Do not stop abruptly — severe withdrawal possible.",route:"Oral"},   {id:123,generic:"methocarbamol",brand:"Robaxin",use:"Muscle spasms",class:"Muscle Relaxant",schedule:null,notes:"May discolor urine (green/black). Sedation.",route:"Oral"},   {id:124,generic:"tizanidine",brand:"Zanaflex",use:"Muscle spasticity",class:"Muscle Relaxant",schedule:null,notes:"Short duration of action. Liver toxicity possible.",route:"Oral"},   {id:125,generic:"quetiapine",brand:"Seroquel",use:"Schizophrenia, bipolar",class:"Atypical Antipsychotic",schedule:null,notes:"Sedating. Monitor for metabolic syndrome.",route:"Oral"},   {id:126,generic:"aripiprazole",brand:"Abilify",use:"Schizophrenia, bipolar",class:"Atypical Antipsychotic",schedule:null,notes:"Less metabolic effects. Can cause akathisia.",route:"Oral"},   {id:127,generic:"risperidone",brand:"Risperdal",use:"Schizophrenia, bipolar",class:"Atypical Antipsychotic",schedule:null,notes:"Metabolic effects. Elevated prolactin levels.",route:"Oral"},   {id:128,generic:"olanzapine",brand:"Zyprexa",use:"Schizophrenia, bipolar",class:"Atypical Antipsychotic",schedule:null,notes:"Significant weight gain and metabolic effects.",route:"Oral"},   {id:129,generic:"lithium",brand:"Lithobid",use:"Bipolar disorder",class:"Mood Stabilizer",schedule:null,notes:"Narrow therapeutic index. Monitor thyroid/renal function.",route:"Oral"},   {id:130,generic:"methylphenidate",brand:"Ritalin, Concerta",use:"ADHD",class:"CNS Stimulant",schedule:"Schedule II",notes:"Insomnia, appetite suppression. High abuse potential.",route:"Oral"},   {id:131,generic:"amphetamine salts",brand:"Adderall",use:"ADHD",class:"CNS Stimulant",schedule:"Schedule II",notes:"High abuse potential. Monitor cardiovascular effects.",route:"Oral"},   {id:132,generic:"lisdexamfetamine",brand:"Vyvanse",use:"ADHD",class:"CNS Stimulant",schedule:"Schedule II",notes:"Prodrug — lower abuse potential. Once daily.",route:"Oral"},   {id:133,generic:"atomoxetine",brand:"Strattera",use:"ADHD",class:"SNRI",schedule:null,notes:"Non-stimulant. Black box: suicidal thinking in children.",route:"Oral"},   {id:134,generic:"alendronate",brand:"Fosamax",use:"Osteoporosis",class:"Bisphosphonate",schedule:null,notes:"Take with full glass of water, stay upright 30 min.",route:"Oral"},   {id:135,generic:"ibandronate",brand:"Boniva",use:"Osteoporosis",class:"Bisphosphonate",schedule:null,notes:"Monthly oral or quarterly IV. Stay upright 60 min.",route:"Oral/IV"},   {id:136,generic:"raloxifene",brand:"Evista",use:"Osteoporosis prevention",class:"SERM",schedule:null,notes:"Increased VTE risk. Not for premenopausal women.",route:"Oral"},   {id:137,generic:"estradiol",brand:"Estrace",use:"Menopausal symptoms",class:"Estrogen",schedule:null,notes:"Increased risk of DVT, stroke, endometrial cancer.",route:"Oral/Patch"},   {id:138,generic:"medroxyprogesterone",brand:"Provera",use:"Contraception",class:"Progestin",schedule:null,notes:"Loss of bone density with prolonged use.",route:"Oral/IM"},   {id:139,generic:"ethinyl estradiol/norgestimate",brand:"Ortho Tri-Cyclen",use:"Oral contraception",class:"Contraceptive",schedule:null,notes:"VTE risk. Take at same time daily.",route:"Oral"},   {id:140,generic:"levonorgestrel",brand:"Plan B",use:"Emergency contraception",class:"Progestin",schedule:null,notes:"Take within 72 hrs. Nausea common.",route:"Oral"},   {id:141,generic:"tamsulosin",brand:"Flomax",use:"BPH",class:"Alpha-1 Blocker",schedule:null,notes:"Take 30 min after same meal daily. Orthostatic hypotension.",route:"Oral"},   {id:142,generic:"finasteride",brand:"Proscar",use:"BPH, male pattern baldness",class:"5-Alpha Reductase Inhibitor",schedule:null,notes:"Women of childbearing age should not handle crushed tablets.",route:"Oral"},   {id:143,generic:"solifenacin",brand:"Vesicare",use:"Overactive bladder",class:"Anticholinergic",schedule:null,notes:"Dry mouth, constipation, blurred vision.",route:"Oral"},   {id:144,generic:"oxybutynin",brand:"Ditropan",use:"Overactive bladder",class:"Anticholinergic",schedule:null,notes:"Significant anticholinergic burden. Avoid in elderly.",route:"Oral/Patch"},   {id:145,generic:"tretinoin",brand:"Retin-A",use:"Acne",class:"Topical Retinoid",schedule:null,notes:"Apply at night. Photosensitivity.",route:"Topical"},   {id:146,generic:"triamcinolone",brand:"Kenalog",use:"Inflammation",class:"Corticosteroid",schedule:null,notes:"Skin atrophy with prolonged use.",route:"Topical/Injection"},   {id:147,generic:"hydrocortisone",brand:"Cortaid",use:"Inflammation",class:"Corticosteroid",schedule:null,notes:"Lowest potency topical steroid — safe for face.",route:"Topical"},   {id:148,generic:"betamethasone",brand:"Diprolene",use:"Inflammation",class:"Corticosteroid",schedule:null,notes:"High potency — avoid on face.",route:"Topical"},   {id:149,generic:"cetirizine",brand:"Zyrtec",use:"Allergies",class:"Antihistamine",schedule:null,notes:"May cause some drowsiness. OTC available.",route:"Oral"},   {id:150,generic:"loratadine",brand:"Claritin",use:"Allergies",class:"Antihistamine",schedule:null,notes:"Non-sedating. OTC. Once daily.",route:"Oral"},   {id:151,generic:"fexofenadine",brand:"Allegra",use:"Allergies",class:"Antihistamine",schedule:null,notes:"Truly non-sedating. Avoid taking with fruit juice.",route:"Oral"},   {id:152,generic:"diphenhydramine",brand:"Benadryl",use:"Allergies, insomnia",class:"Antihistamine",schedule:null,notes:"Significant sedation and anticholinergic effects.",route:"Oral"},   {id:153,generic:"digoxin",brand:"Lanoxin",use:"Heart failure, AFib",class:"Cardiac Glycoside",schedule:null,notes:"Narrow therapeutic index. Toxicity: nausea, vision changes.",route:"Oral/IV"},   {id:154,generic:"amiodarone",brand:"Cordarone",use:"Arrhythmias",class:"Antiarrhythmic",schedule:null,notes:"Many serious side effects: pulmonary, thyroid, liver.",route:"Oral/IV"},   {id:155,generic:"nitroglycerin",brand:"Nitrostat",use:"Angina",class:"Nitrate",schedule:null,notes:"Sublingual for acute angina. Tolerance with continuous use.",route:"Sublingual"},   {id:156,generic:"isosorbide mononitrate",brand:"Imdur",use:"Angina prevention",class:"Nitrate",schedule:null,notes:"Allow a nitrate-free interval to prevent tolerance.",route:"Oral"},   {id:157,generic:"hydralazine",brand:"Apresoline",use:"Hypertension, heart failure",class:"Vasodilator",schedule:null,notes:"Drug-induced lupus with long-term use.",route:"Oral/IV"},   {id:158,generic:"clonidine",brand:"Catapres",use:"Hypertension, ADHD",class:"Alpha-2 Agonist",schedule:null,notes:"Rebound hypertension if stopped abruptly.",route:"Oral/Patch"},   {id:159,generic:"methadone",brand:"Dolophine",use:"Opioid use disorder, pain",class:"Opioid Agonist",schedule:"Schedule II",notes:"Long/variable half-life. QT prolongation.",route:"Oral"},   {id:160,generic:"buprenorphine",brand:"Suboxone",use:"Opioid use disorder",class:"Partial Opioid Agonist",schedule:"Schedule III",notes:"Ceiling effect for respiratory depression.",route:"Sublingual"},   {id:161,generic:"cholecalciferol",brand:"Vitamin D3",use:"Vitamin D deficiency",class:"Supplement",schedule:null,notes:"Take with food (fat-soluble).",route:"Oral"},   {id:162,generic:"ferrous sulfate",brand:"Slow Fe",use:"Iron deficiency anemia",class:"Supplement",schedule:null,notes:"Take on empty stomach for best absorption. Stools may be dark.",route:"Oral"},   {id:163,generic:"folic acid",brand:"Folate",use:"Folate deficiency",class:"Supplement",schedule:null,notes:"Recommended 400–800 mcg daily in women of childbearing age.",route:"Oral"},   {id:164,generic:"cyanocobalamin",brand:"Vitamin B12",use:"Vitamin B12 deficiency",class:"Supplement",schedule:null,notes:"Intrinsic factor needed for oral absorption.",route:"Oral/IM"},   {id:165,generic:"donepezil",brand:"Aricept",use:"Alzheimer's disease",class:"Acetylcholinesterase Inhibitor",schedule:null,notes:"Take at bedtime. Bradycardia risk.",route:"Oral"},   {id:166,generic:"memantine",brand:"Namenda",use:"Alzheimer's disease",class:"NMDA Receptor Antagonist",schedule:null,notes:"Can be combined with donepezil.",route:"Oral"},   {id:167,generic:"sumatriptan",brand:"Imitrex",use:"Migraine (acute treatment)",class:"Triptan",schedule:null,notes:"Not for prevention. Contraindicated in cardiovascular disease.",route:"Oral/Nasal"},   {id:168,generic:"topiramate",brand:"Topamax",use:"Migraine prevention, seizures",class:"Anticonvulsant",schedule:null,notes:"Weight loss side effect. Kidney stones.",route:"Oral"},   {id:169,generic:"vancomycin",brand:"Vancocin",use:"MRSA, C. diff",class:"Antibiotic",schedule:null,notes:"Red man syndrome with rapid IV infusion. Nephrotoxic.",route:"Oral/IV"},   {id:170,generic:"linezolid",brand:"Zyvox",use:"MRSA, VRE",class:"Antibiotic",schedule:null,notes:"Serotonin syndrome risk. Avoid tyramine foods.",route:"Oral/IV"},   {id:171,generic:"piperacillin-tazobactam",brand:"Zosyn",use:"Hospital-acquired infections",class:"Antibiotic",schedule:null,notes:"IV only. Broad coverage including Pseudomonas.",route:"IV"},   {id:172,generic:"meropenem",brand:"Merrem",use:"Serious hospital infections",class:"Antibiotic",schedule:null,notes:"Broad-spectrum reserved for resistant infections.",route:"IV"},   {id:173,generic:"latanoprost",brand:"Xalatan",use:"Glaucoma",class:"Ophthalmic",schedule:null,notes:"Refrigerate until opened. May change iris color.",route:"Ophthalmic"},   {id:174,generic:"timolol",brand:"Timoptic",use:"Glaucoma",class:"Ophthalmic",schedule:null,notes:"Systemic absorption can occur — avoid in COPD/asthma.",route:"Ophthalmic"},   {id:175,generic:"ondansetron",brand:"Zofran",use:"Nausea/vomiting",class:"Antiemetic",schedule:null,notes:"QT prolongation at high doses.",route:"Oral/IV"},   {id:176,generic:"dexamethasone",brand:"Decadron",use:"Inflammation",class:"Corticosteroid",schedule:null,notes:"Most potent commonly used corticosteroid.",route:"Oral/IV"},   {id:177,generic:"prednisone",brand:"Deltasone",use:"Inflammation",class:"Corticosteroid",schedule:null,notes:"Take with food. Taper dose.",route:"Oral"},   {id:178,generic:"methylprednisolone",brand:"Medrol",use:"Severe inflammation",class:"Corticosteroid",schedule:null,notes:"Available as Dose Pack.",route:"Oral/IV"},   {id:179,generic:"allopurinol",brand:"Zyloprim",use:"Gout prevention",class:"Xanthine Oxidase Inhibitor",schedule:null,notes:"Drink plenty of fluids. Rash possible.",route:"Oral"},   {id:180,generic:"colchicine",brand:"Colcrys",use:"Acute gout",class:"Anti-Gout Agent",schedule:null,notes:"GI side effects dose-limiting.",route:"Oral"},   {id:181,generic:"sildenafil",brand:"Viagra",use:"Erectile dysfunction",class:"PDE-5 Inhibitor",schedule:null,notes:"Avoid with nitrates (fatal hypotension).",route:"Oral"},   {id:182,generic:"tadalafil",brand:"Cialis",use:"Erectile dysfunction",class:"PDE-5 Inhibitor",schedule:null,notes:"Longest duration (~36 hrs). Avoid with nitrates.",route:"Oral"},   {id:183,generic:"hydroxychloroquine",brand:"Plaquenil",use:"Lupus, rheumatoid arthritis",class:"DMARD",schedule:null,notes:"Monitor eyes — retinal toxicity with long-term use.",route:"Oral"},   {id:184,generic:"methotrexate",brand:"Trexall",use:"Rheumatoid arthritis",class:"DMARD",schedule:null,notes:"Weekly dosing for RA. Folic acid supplementation required.",route:"Oral"},   {id:185,generic:"adalimumab",brand:"Humira",use:"Rheumatoid arthritis",class:"DMARD",schedule:null,notes:"Subq injection. Increased infection risk.",route:"Subcutaneous"},   {id:186,generic:"pantoprazole sodium",brand:"Protonix IV",use:"GERD",class:"Proton Pump Inhibitor",schedule:null,notes:"IV infusion in hospital setting.",route:"IV"},   {id:187,generic:"levocetirizine",brand:"Xyzal",use:"Allergies",class:"Antihistamine",schedule:null,notes:"R-enantiomer of cetirizine.",route:"Oral"},   {id:188,generic:"desloratadine",brand:"Clarinex",use:"Allergies",class:"Antihistamine",schedule:null,notes:"Active metabolite of loratadine.",route:"Oral"},   {id:189,generic:"meclizine",brand:"Antivert",use:"Vertigo, motion sickness",class:"Antihistamine",schedule:null,notes:"OTC for motion sickness. Causes drowsiness.",route:"Oral"},   {id:190,generic:"olopatadine",brand:"Pataday",use:"Allergic conjunctivitis",class:"Ophthalmic",schedule:null,notes:"Eye drops. OTC available.",route:"Ophthalmic"},   {id:191,generic:"sodium chloride 0.9%",brand:"Normal Saline",use:"IV fluid replacement",class:"IV Fluid",schedule:null,notes:"Most common IV fluid. Isotonic.",route:"IV"},   {id:192,generic:"potassium chloride",brand:"K-Dur",use:"Hypokalemia",class:"Supplement",schedule:null,notes:"Take with full glass of water. Never give IV push.",route:"Oral/IV"},   {id:193,generic:"magnesium sulfate",brand:"Epsom Salt",use:"Pre-eclampsia, hypomagnesemia",class:"Electrolyte",schedule:null,notes:"Monitor Mg levels. Antidote: calcium gluconate.",route:"IV/IM"},   {id:194,generic:"ketorolac",brand:"Toradol",use:"Short-term severe pain",class:"NSAID",schedule:null,notes:"Max 5 days use (systemic). Avoid in renal impairment.",route:"IM/IV/Oral"},   {id:195,generic:"lidocaine",brand:"Xylocaine",use:"Local anesthesia",class:"Local Anesthetic",schedule:null,notes:"CNS and cardiac toxicity with overdose.",route:"Topical/IV"},   {id:196,generic:"epinephrine",brand:"EpiPen",use:"Anaphylaxis",class:"Catecholamine",schedule:null,notes:"Inject into outer thigh. Always follow with ER visit.",route:"IM"},   {id:197,generic:"diphenhydramine",brand:"Benadryl",use:"Allergic reactions",class:"Antihistamine",schedule:null,notes:"Significant sedation and anticholinergic effects.",route:"Oral/IV/IM"},   {id:198,generic:"methylnaltrexone",brand:"Relistor",use:"Opioid-induced constipation",class:"Opioid Antagonist",schedule:null,notes:"Does not reverse analgesia (does not cross BBB).",route:"Subcutaneous"},   {id:199,generic:"senna",brand:"Senokot",use:"Constipation",class:"Stimulant Laxative",schedule:null,notes:"Take with water. May cause cramping.",route:"Oral"},   {id:200,generic:"polyethylene glycol 3350",brand:"MiraLax",use:"Constipation",class:"Osmotic Laxative",schedule:null,notes:"Dissolve in 8 oz of liquid. Works in 1–3 days.",route:"Oral"} ];
 
-let state = {
-  questionsAnswered: 0,
-  correctAnswers: 0,
-  streak: 0,
-  seen: new Set()
-};
-
+let state = { questionsAnswered: 0, correctAnswers: 0, streak: 0, seen: new Set() };
 let currentDrug = null;
 let isAnswered = false;
 
-// Initialization
 function init() {
   populateDropdowns();
   updateDashboard();
@@ -453,7 +221,8 @@ function init() {
 }
 
 function switchTab(tabId, btnElement) {
-  document.querySelectorAll('.main-content > div').forEach(el => el.classList.add('hidden'));
+  // Hide all tab content only
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
   document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
   
   document.getElementById(`tab-${tabId}`).classList.remove('hidden');
@@ -463,16 +232,12 @@ function switchTab(tabId, btnElement) {
 function updateDashboard() {
   const acc = state.questionsAnswered === 0 ? 0 : Math.round((state.correctAnswers / state.questionsAnswered) * 100);
   const seenPct = Math.round((state.seen.size / DRUGS.length) * 100);
-  
   document.getElementById('stat-seen').textContent = state.seen.size;
   document.getElementById('bar-seen').style.width = `${seenPct}%`;
-  
   document.getElementById('stat-acc').textContent = `${acc}%`;
   document.getElementById('bar-acc').style.width = `${acc}%`;
-  
   document.getElementById('stat-streak').textContent = state.streak;
-  document.getElementById('bar-streak').style.width = `${Math.min(state.streak * 5, 100)}%`;
-  
+  document.getElementById('bar-streak').style.width = `${Math.min(state.streak * 10, 100)}%`;
   document.getElementById('nav-quiz-cnt').textContent = state.questionsAnswered;
 }
 
@@ -486,24 +251,12 @@ function populateDropdowns() {
   });
 }
 
-// Quiz Logic
-function getFilteredPool() {
-  const cls = document.getElementById('filter-class').value;
-  const sch = document.getElementById('filter-sched').value;
-  
-  return DRUGS.filter(d => {
-    if (cls !== 'all' && d.class !== cls) return false;
-    if (sch === 'controlled' && !d.schedule) return false;
-    if (sch === 'noncontrolled' && d.schedule) return false;
-    return true;
-  });
-}
-
 function loadQuestion() {
-  const pool = getFilteredPool();
+  const cls = document.getElementById('filter-class').value;
+  const pool = DRUGS.filter(d => cls === 'all' || d.class === cls);
+  
   if(pool.length < 4) {
-    document.getElementById('quiz-question').innerHTML = "Not enough drugs match these filters to create a quiz. Please broaden your selection.";
-    document.getElementById('quiz-options').innerHTML = "";
+    document.getElementById('quiz-question').innerHTML = "Not enough drugs for these filters.";
     return;
   }
   
@@ -511,44 +264,37 @@ function loadQuestion() {
   document.getElementById('btn-next').classList.add('hidden');
   document.getElementById('btn-reveal').classList.add('hidden');
   
-  // Pick random drug
   currentDrug = pool[Math.floor(Math.random() * pool.length)];
   state.seen.add(currentDrug.id);
   
   const mode = document.getElementById('filter-mode').value;
   let questionHtml = '', correctAns = '';
   
-  if (mode === 'g2u') { questionHtml = `What is <strong>${currentDrug.generic}</strong> primarily used for?`; correctAns = currentDrug.use; }
-  else if (mode === 'b2g') { questionHtml = `What is the generic name for <strong>${currentDrug.brand}</strong>?`; correctAns = currentDrug.generic; }
+  if (mode === 'g2u') { questionHtml = `What is <strong>${currentDrug.generic}</strong> used for?`; correctAns = currentDrug.use; }
+  else if (mode === 'b2g') { questionHtml = `Generic name for <strong>${currentDrug.brand}</strong>?`; correctAns = currentDrug.generic; }
   else if (mode === 'u2g') { questionHtml = `Which drug is used for: <em>${currentDrug.use}</em>?`; correctAns = currentDrug.generic; }
-  else if (mode === 'c2d') { questionHtml = `Which drug belongs to the class: <strong>${currentDrug.class}</strong>?`; correctAns = currentDrug.generic; }
+  else if (mode === 'c2d') { questionHtml = `Which is a <strong>${currentDrug.class}</strong>?`; correctAns = currentDrug.generic; }
 
   document.getElementById('quiz-question').innerHTML = questionHtml;
-  document.getElementById('quiz-meta').textContent = `Question ${state.questionsAnswered + 1} | Pool Size: ${pool.length}`;
   
-  // Generate Options
   let options = [correctAns];
   while(options.length < 4) {
-    let randomWrong = pool[Math.floor(Math.random() * pool.length)];
-    let wrongAns = '';
-    if (mode === 'g2u') wrongAns = randomWrong.use;
-    else if (mode === 'b2g') wrongAns = randomWrong.generic;
-    else if (mode === 'u2g' || mode === 'c2d') wrongAns = randomWrong.generic;
-    
-    if(!options.includes(wrongAns)) options.push(wrongAns);
+    let r = pool[Math.floor(Math.random() * pool.length)];
+    let w = (mode === 'g2u') ? r.use : r.generic;
+    if(!options.includes(w)) options.push(w);
   }
+  options.sort(() => Math.random() - 0.5);
   
-  options.sort(() => Math.random() - 0.5); // Shuffle
-  
-  const optionsContainer = document.getElementById('quiz-options');
-  optionsContainer.innerHTML = '';
+  const container = document.getElementById('quiz-options');
+  container.innerHTML = '';
   options.forEach(opt => {
     let btn = document.createElement('button');
     btn.className = 'option-btn';
     btn.textContent = opt;
     btn.onclick = () => handleAnswer(btn, opt, correctAns);
-    optionsContainer.appendChild(btn);
+    container.appendChild(btn);
   });
+  updateDashboard();
 }
 
 function handleAnswer(btn, selected, correct) {
@@ -556,8 +302,7 @@ function handleAnswer(btn, selected, correct) {
   isAnswered = true;
   state.questionsAnswered++;
   
-  const buttons = document.querySelectorAll('.option-btn');
-  buttons.forEach(b => {
+  document.querySelectorAll('.option-btn').forEach(b => {
     b.disabled = true;
     if(b.textContent === correct) b.classList.add('correct');
     else if (b === btn && selected !== correct) b.classList.add('wrong');
@@ -575,21 +320,14 @@ function handleAnswer(btn, selected, correct) {
   document.getElementById('btn-reveal').classList.remove('hidden');
 }
 
-// Lexicon Logic
 function renderLexiconList() {
   const query = document.getElementById('lexicon-search').value.toLowerCase();
   const list = document.getElementById('lexicon-list');
   list.innerHTML = '';
-  
-  DRUGS.filter(d => 
-    d.generic.toLowerCase().includes(query) || 
-    d.brand.toLowerCase().includes(query) || 
-    d.use.toLowerCase().includes(query) ||
-    d.class.toLowerCase().includes(query)
-  ).forEach(d => {
+  DRUGS.filter(d => d.generic.includes(query) || d.brand.toLowerCase().includes(query)).forEach(d => {
     let div = document.createElement('div');
     div.className = 'lexicon-item';
-    div.innerHTML = `<div class="lexicon-generic">${d.generic}</div><div class="lexicon-brand">${d.brand}</div>`;
+    div.innerHTML = `<strong>${d.generic}</strong><br><small>${d.brand}</small>`;
     div.onclick = () => renderLexiconDetail(d, div);
     list.appendChild(div);
   });
@@ -598,47 +336,20 @@ function renderLexiconList() {
 function renderLexiconDetail(drug, element) {
   document.querySelectorAll('.lexicon-item').forEach(el => el.classList.remove('active'));
   if(element) element.classList.add('active');
-  
-  const detail = document.getElementById('lexicon-detail');
-  detail.innerHTML = `
-    <h2 style="font-size: 28px; font-weight: 700;">${drug.generic}</h2>
-    <p style="font-size: 16px; color: var(--text-muted); margin-bottom: 1.5rem;">Brands: ${drug.brand}</p>
-    
-    <div>
-      <span class="detail-tag tag-class">${drug.class}</span>
-      ${drug.schedule ? `<span class="detail-tag tag-sched">${drug.schedule}</span>` : '<span class="detail-tag" style="background:#f1f5f9;color:#64748b">Non-controlled</span>'}
-      <span class="detail-tag tag-route">${drug.route}</span>
-    </div>
-    
-    <div class="info-section">
-      <div class="info-label">Primary Indications</div>
-      <div class="info-value">${drug.use}</div>
-    </div>
-    
-    <div class="info-box">
-      <div class="info-label" style="color: #b45309;">⚠ Key Counseling Points</div>
-      <div class="info-value" style="color: #92400e;">${drug.notes}</div>
-    </div>
+  document.getElementById('lexicon-detail').innerHTML = `
+    <h2>${drug.generic}</h2>
+    <p>Brands: ${drug.brand}</p>
+    <span class="detail-tag tag-class">${drug.class}</span>
+    <div class="info-box">${drug.notes}</div>
   `;
 }
 
 function openLexicon(id) {
   const drug = DRUGS.find(d => d.id === id);
   switchTab('lexicon', document.querySelectorAll('.nav-btn')[1]);
-  
-  // Find the right element in the list and trigger click, or just render it directly
   renderLexiconDetail(drug, null);
-  document.getElementById('lexicon-search').value = drug.generic;
-  renderLexiconList();
-  
-  // Re-select the top one (which will be our drug due to search)
-  setTimeout(() => {
-    const firstItem = document.querySelector('.lexicon-item');
-    if(firstItem) firstItem.classList.add('active');
-  }, 50);
 }
 
-// Start
 init();
 </script>
 </body>
