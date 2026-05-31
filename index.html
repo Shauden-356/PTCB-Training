@@ -83,7 +83,8 @@
   .quiz-container { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 2.5rem; box-shadow: var(--shadow-soft); }
   .question-text { font-size: 22px; font-weight: 600; margin-bottom: 2rem; min-height: 60px; }
   
-  .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; width: 100%; }
+  /* Updated Grid: Strict 2 on top, 2 on bottom on wider screens */
+  .options-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; width: 100%; }
   .option-btn { 
     padding: 1.25rem; 
     border-radius: var(--radius-md); 
@@ -94,7 +95,7 @@
     cursor: pointer; 
     text-align: left; 
     transition: all 0.2s;
-    min-height: 80px; /* Ensures text doesn't overlap/squish */
+    min-height: 80px; 
     display: flex;
     align-items: center;
     word-break: break-word;
@@ -102,6 +103,13 @@
   .option-btn:hover:not(:disabled) { border-color: var(--accent); background: var(--accent-bg); }
   .option-btn.correct { background: var(--success-bg); border-color: var(--success); color: #065f46; }
   .option-btn.wrong { background: var(--danger-bg); border-color: var(--danger); color: #991b1b; }
+
+  /* Explanation Block */
+  .explanation-box { margin-top: 1.5rem; padding: 1.25rem; border-radius: var(--radius-md); border-left: 4px solid var(--accent); background: var(--surface2); }
+  .explanation-box.correct-wrap { border-left-color: var(--success); background: var(--success-bg); color: #065f46; }
+  .explanation-box.wrong-wrap { border-left-color: var(--danger); background: var(--danger-bg); color: #991b1b; }
+  .explanation-title { font-weight: 700; margin-bottom: 4px; font-size: 15px; }
+  .explanation-text { font-size: 14px; line-height: 1.5; }
 
   /* Lexicon Styling */
   .lexicon-layout { display: flex; gap: 1.5rem; height: 600px; }
@@ -176,11 +184,15 @@
         <select class="input-elem" id="filter-class" onchange="loadQuestion()">
           <option value="all">All Drug Classes</option>
         </select>
+        <button class="btn btn-outline" onclick="resetProgress()" style="font-size:12px; padding:0.4rem 0.8rem; margin-left:auto;">Reset Stats</button>
       </div>
 
       <div class="quiz-container">
         <div class="question-text" id="quiz-question"></div>
         <div class="options-grid" id="quiz-options"></div>
+        
+        <div id="quiz-explanation" class="explanation-box hidden"></div>
+
         <div style="margin-top: 2rem; display: flex; gap: 1rem;">
           <button class="btn btn-primary hidden" id="btn-next" onclick="loadQuestion()">Next Question →</button>
           <button class="btn btn-outline hidden" id="btn-reveal" onclick="openLexicon(currentDrug.id)">View Info</button>
@@ -214,14 +226,52 @@ let currentDrug = null;
 let isAnswered = false;
 
 function init() {
+  loadState();
   populateDropdowns();
   updateDashboard();
   loadQuestion();
   renderLexiconList();
 }
 
+// Save application state variables locally inside the browser
+function saveState() {
+  const serializedState = {
+    questionsAnswered: state.questionsAnswered,
+    correctAnswers: state.correctAnswers,
+    streak: state.streak,
+    seen: Array.from(state.seen)
+  };
+  localStorage.setItem('rxmaster_progress_state', JSON.stringify(serializedState));
+}
+
+// Hydrate saved records if present inside localStorage
+function loadState() {
+  const saved = localStorage.getItem('rxmaster_progress_state');
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      state.questionsAnswered = parsed.questionsAnswered || 0;
+      state.correctAnswers = parsed.correctAnswers || 0;
+      state.streak = parsed.streak || 0;
+      state.seen = new Set(parsed.seen || []);
+    } catch (e) {
+      console.error("Error reading stored data, starting fresh:", e);
+    }
+  }
+}
+
+// Allows users to clear metrics back to 0
+function resetProgress() {
+  if (confirm("Are you sure you want to clear your statistics and history?")) {
+    localStorage.removeItem('rxmaster_progress_state');
+    state = { questionsAnswered: 0, correctAnswers: 0, streak: 0, seen: new Set() };
+    if (currentDrug) state.seen.add(currentDrug.id);
+    updateDashboard();
+    saveState();
+  }
+}
+
 function switchTab(tabId, btnElement) {
-  // Hide all tab content only
   document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
   document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
   
@@ -264,8 +314,15 @@ function loadQuestion() {
   document.getElementById('btn-next').classList.add('hidden');
   document.getElementById('btn-reveal').classList.add('hidden');
   
+  // Clean explanation box
+  const expBox = document.getElementById('quiz-explanation');
+  expBox.classList.add('hidden');
+  expBox.className = 'explanation-box';
+  expBox.innerHTML = '';
+  
   currentDrug = pool[Math.floor(Math.random() * pool.length)];
   state.seen.add(currentDrug.id);
+  saveState();
   
   const mode = document.getElementById('filter-mode').value;
   let questionHtml = '', correctAns = '';
@@ -302,20 +359,41 @@ function handleAnswer(btn, selected, correct) {
   isAnswered = true;
   state.questionsAnswered++;
   
+  const isCorrect = (selected === correct);
+  
   document.querySelectorAll('.option-btn').forEach(b => {
     b.disabled = true;
     if(b.textContent === correct) b.classList.add('correct');
-    else if (b === btn && selected !== correct) b.classList.add('wrong');
+    else if (b === btn && !isCorrect) b.classList.add('wrong');
   });
   
-  if(selected === correct) {
+  if(isCorrect) {
     state.correctAnswers++;
     state.streak++;
   } else {
     state.streak = 0;
   }
   
+  saveState();
   updateDashboard();
+  
+  // Handle Explanation Setup
+  const expBox = document.getElementById('quiz-explanation');
+  expBox.classList.remove('hidden');
+  if(isCorrect) {
+    expBox.classList.add('correct-wrap');
+    expBox.innerHTML = `
+      <div class="explanation-title">✨ Correct!</div>
+      <div class="explanation-text"><strong>${currentDrug.generic}</strong> (${currentDrug.brand}) is classified as a <strong>${currentDrug.class}</strong>, primarily indicated for: <em>${currentDrug.use}</em>.<br><small><strong>Notes:</strong> ${currentDrug.notes || 'N/A'}</small></div>
+    `;
+  } else {
+    expBox.classList.add('wrong-wrap');
+    expBox.innerHTML = `
+      <div class="explanation-title">❌ Incorrect</div>
+      <div class="explanation-text">The right answer was <strong>${correct}</strong>. <strong>${currentDrug.generic}</strong> (${currentDrug.brand}) belongs to the <strong>${currentDrug.class}</strong> family and is used for <em>${currentDrug.use}</em>.<br><small><strong>Clinical Notes:</strong> ${currentDrug.notes || 'N/A'}</small></div>
+    `;
+  }
+  
   document.getElementById('btn-next').classList.remove('hidden');
   document.getElementById('btn-reveal').classList.remove('hidden');
 }
