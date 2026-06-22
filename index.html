@@ -184,7 +184,18 @@
         <select class="input-elem" id="filter-class" onchange="loadQuestion()">
           <option value="all">All Drug Classes</option>
         </select>
-        <button class="btn btn-outline" onclick="resetProgress()" style="font-size:12px; padding:0.4rem 0.8rem; margin-left:auto;">Reset Stats</button>
+        <button class="btn btn-outline" onclick="showResetModal()" style="font-size:12px; padding:0.4rem 0.8rem; margin-left:auto;">Reset Stats</button>
+      </div>
+
+      <div id="reset-modal" class="hidden" style="position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(15, 23, 42, 0.65); z-index: 60;">
+        <div style="background: white; border-radius: 20px; padding: 2rem; width: min(440px, 90%); box-shadow: 0 25px 60px rgba(15, 23, 42, 0.18);">
+          <h2 style="margin: 0 0 0.75rem; font-size: 1.25rem; color: var(--text-main);">Clear statistics and history?</h2>
+          <p style="margin: 0 0 1.5rem; color: var(--text-muted); line-height: 1.6;">This will remove your saved quiz progress and reset all tracked statistics to zero.</p>
+          <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: flex-end;">
+            <button class="btn btn-outline" onclick="closeResetModal()" style="min-width: 110px;">Cancel</button>
+            <button class="btn btn-primary" onclick="confirmReset()" style="min-width: 120px; background: #ef4444;">Yes, clear all</button>
+          </div>
+        </div>
       </div>
 
       <div class="quiz-container">
@@ -260,15 +271,22 @@ function loadState() {
   }
 }
 
-// Allows users to clear metrics back to 0
-function resetProgress() {
-  if (confirm("Are you sure you want to clear your statistics and history?")) {
-    localStorage.removeItem('rxmaster_progress_state');
-    state = { questionsAnswered: 0, correctAnswers: 0, streak: 0, seen: new Set() };
-    if (currentDrug) state.seen.add(currentDrug.id);
-    updateDashboard();
-    saveState();
-  }
+// Display an in-page reset confirmation dialog
+function showResetModal() {
+  document.getElementById('reset-modal').classList.remove('hidden');
+}
+
+function closeResetModal() {
+  document.getElementById('reset-modal').classList.add('hidden');
+}
+
+function confirmReset() {
+  localStorage.removeItem('rxmaster_progress_state');
+  state = { questionsAnswered: 0, correctAnswers: 0, streak: 0, seen: new Set() };
+  if (currentDrug) state.seen.add(currentDrug.id);
+  updateDashboard();
+  saveState();
+  closeResetModal();
 }
 
 function switchTab(tabId, btnElement) {
@@ -414,11 +432,20 @@ function renderLexiconList() {
 function renderLexiconDetail(drug, element) {
   document.querySelectorAll('.lexicon-item').forEach(el => el.classList.remove('active'));
   if(element) element.classList.add('active');
+  const medicalDefinition = drug.mwDefinition || drug.notes || 'A medical definition is not available for this entry.';
+  const simpleDefinition = drug.simpleDefinition || drug.use || 'A simple explanation is not available for this entry.';
   document.getElementById('lexicon-detail').innerHTML = `
     <h2>${drug.generic}</h2>
     <p>Brands: ${drug.brand}</p>
     <span class="detail-tag tag-class">${drug.class}</span>
-    <div class="info-box">${drug.notes}</div>
+    <div class="info-box">
+      <div class="explanation-title">Merriam-Webster Medical Dictionary</div>
+      <div class="explanation-text">${medicalDefinition}</div>
+    </div>
+    <div class="info-box" style="background: var(--accent-bg); border-left-color: var(--accent); color: var(--text-main);">
+      <div class="explanation-title">Simple Explanation</div>
+      <div class="explanation-text">${simpleDefinition}</div>
+    </div>
   `;
 }
 
